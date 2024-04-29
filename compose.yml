@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  app:
+    container_name: docker-react-container
+    image: docker-react-i
+    build: 
+      context: ./Frontend/bytejack_frontend
+    ports:
+      - 3000:3000
+
+
+
+
+# version: '3.8'
+
+# services:
+#   bytejack_frontend:
+#     build: 
+#       context: ./Frontend/bytejack_frontend
+#     container_name: Frontend
+#     ports:
+#       - "3000:3000"
+#     stdin_open: true
+#     tty: true
