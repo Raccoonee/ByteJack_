@@ -7,7 +7,12 @@ services:
     build: 
       context: ./Frontend/bytejack_frontend
     ports:
-      - 3000:3000
+      - "3000:3000"
+  api:
+    build: ./api
+    image: pp
+    ports:
+      - "5001:5001"
 
 
 

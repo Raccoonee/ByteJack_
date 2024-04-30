@@ -1,7 +1,7 @@
 import './cssfiles/TestTable.css'
 import ChipsSection from './ChipsSection.js'
 import Actions from './Actions.js';
-import React from "react";
+import React, { useEffect } from "react";
 import Player from "./Player";
 import Dealer from "./Dealer"
 
@@ -20,6 +20,12 @@ let test = {
 }
 
 const TestTable = () => {
+    useEffect(() => {
+        fetch('http://api:5001/ppp')
+        .then(response => response.json())
+        .then(data => console.log(data));
+    }, []
+    );
     return (
         <>
             <div class="parent">
