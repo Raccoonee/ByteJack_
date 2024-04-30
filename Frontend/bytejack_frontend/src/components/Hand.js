@@ -38,4 +38,6 @@ const Hand = ({cards = []}) => {
     )
 }
 
-export default Hand;
+
+
+export default Hand

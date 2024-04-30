@@ -1,3 +1,4 @@
+import './cssfiles/cards.css'
 
 const Card = ({card, rank, suit}) => {
     
@@ -35,3 +36,4 @@ const Card = ({card, rank, suit}) => {
 
 //"card rank-7 spades"
 export default Card;
+

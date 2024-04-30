@@ -1,9 +1,8 @@
-import './cards.css';
+import './cssfiles/TestTable.css'
+import ChipsSection from './ChipsSection.js'
+import Actions from './Actions.js';
 import React from "react";
-import Card from "./Card";
-import Hand from "./Hand";
 import Player from "./Player";
-import DealerHand from "./DealerHand"
 import Dealer from "./Dealer"
 
 let test = {
@@ -20,93 +19,19 @@ let test = {
     }
 }
 
-
 const TestTable = () => {
     return (
         <>
-            <div style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                height: "100%",
-                margin: 0,
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-            }}>
-                <div class="playingCards faceImages simpleCards ">
-                    <div style={{
-                        width: "20vh",
-                        display: "inline-block",
-                    }}>
-                        <Dealer dealerHand={test.Dealer.hand}></Dealer>
-                    </div>
-                    <div style={{
-                        width: "20vh",
-                        display: "inline-block",
-                    }}>
-                        <ul class="table">
-                            <li>
-                                <div class="card rank-A clubs">
-                                    <span class="rank">A</span>
-                                    <span class="suit">&clubs;</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="card rank-k spades">
-                                    <span class="rank">K</span>
-                                    <span class="suit">&spades;</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div style={{
-                        width: "20vh",
-                        display: "inline-block",
-                    }}>
-                        <Player name={test.Players.player1.name} bet={test.Players.player1.bet} hand={test.Players.player1.hand}></Player>
-                    </div>
-                    <div style={{
-                        width: "20vh",
-                        display: "inline-block",
-                    }}>
-                        <ul class="hand">
-                            <li>
-                                <div class="card rank-A hearts">
-                                    <span class="rank">A</span>
-                                    <span class="suit">&spades;</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="card rank-k spades">
-                                    <span class="rank">K</span>
-                                    <span class="suit">&spades;</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                    <div style={{
-                        width: "20vh",
-                        display: "inline-block",
-                    }}>
-                        <ul class="hand">
-                            <li>
-                                <div class="card rank-A hearts">
-                                    <span class="rank">A</span>
-                                    <span class="suit">&spades;</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="card rank-k spades">
-                                    <span class="rank">K</span>
-                                    <span class="suit">&spades;</span>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div >
+            <div class="parent">
+                <div class="div1"> <Player name={test.Players.player1.name} bet={test.Players.player1.bet} hand={test.Players.player1.hand}></Player> </div>
+                <div class="div2"> <Player></Player></div>
+                <div class="div3"> <Actions></Actions></div>
+                <div class="div4"> <Dealer dealerHand={test.Dealer.hand}></Dealer></div>
+                <div class="div5"> <ChipsSection></ChipsSection></div>
+                <div class="div6"> <Player></Player></div>
+                <div class="div7"> <Player></Player></div>
+                <div class="div8"> <Player></Player></div>
+            </div>
         </>
     );
 };

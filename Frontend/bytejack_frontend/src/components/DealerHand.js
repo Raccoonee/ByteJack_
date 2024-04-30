@@ -1,35 +1,35 @@
 import Card from "./Card"
 
-const numChecker = (num) => {
-    if(num.length > 2)
-        return(num.substring(0, 2))
-    else
-        return(num.substring(0, 1))
-}
 
-const suitChecker = (suit) => {
-    if(suit === "♠")
-    {
-        return "spades"
+const DealerHand = ({cards}) => {
+    const numChecker = (num) => {
+        if(num.length > 2)
+            return(num.substring(0, 2))
+        else
+            return(num.substring(0, 1))
     }
-
-    else if(suit === "♥")
-    {
-        return "hearts"
+    
+    const suitChecker = (suit) => {
+        if(suit === "♠")
+        {
+            return "spades"
+        }
+    
+        else if(suit === "♥")
+        {
+            return "hearts"
+        }
+    
+        else if(suit === "♦")
+        {
+            return "diams"
+        }
+    
+        else if(suit === "♣")
+        {
+            return "clubs"
+        }
     }
-
-    else if(suit === "♦")
-    {
-        return "diams"
-    }
-
-    else if(suit === "♣")
-    {
-        return "clubs"
-    }
-}
-
-const DealerHand = ({cards = []}) => {
 
     return (
         <>

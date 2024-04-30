@@ -8,9 +8,7 @@ const Dealer = ({dealerHand}) => {
         let aceCounter = 0;
 
         for(let i = 0; i < cards.length; i++)
-        {
-            console.log(cards[i].substring(0,1));
-            
+        {            
             if(cards[i].substring(0, 1) === "J" || cards[i].substring(0, 1) === "Q" || cards[i].substring(0, 1) === "K")
             {
                 value = 10;
@@ -44,8 +42,8 @@ const Dealer = ({dealerHand}) => {
             <div id="money">
                 <span id="cash">Dealer</span>
                 <div id="bank">Card Count: {cardCount(dealerHand)}<span></span></div>
+                <DealerHand cards={dealerHand}></DealerHand>
             </div>
-            <DealerHand cards={dealerHand}></DealerHand>
         </>
     )
 }
