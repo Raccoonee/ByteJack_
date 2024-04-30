@@ -1,18 +1,43 @@
-import './cssfiles/cards.css'
-import Card from './Card'
+import Card from "./Card"
+import React from "react";
 
-const Hand = () => {
+const numChecker = (num) => {
+    if(num.length > 2)
+        return(num.substring(0, 2))
+    else
+        return(num.substring(0, 1))
+}
 
-    return (
-        <>
-            <div class="playingCards">
-                <ul class="hand">
-                    <li> <Card></Card></li>
-                    <li> <Card></Card></li>
-                </ul>
-            </div>
-        </>
+const suitChecker = (suit) => {
+    if(suit === "♠")
+    {
+        return "spades"
+    }
+
+    else if(suit === "♥")
+    {
+        return "hearts"
+    }
+
+    else if(suit === "♦")
+    {
+        return "diams"
+    }
+
+    else if(suit === "♣")
+    {
+        return "clubs"
+    }
+}
+
+const Hand = ({cards = []}) => {   
+    return(
+        <ul class="hand">
+            {cards.map(item =>(<li><Card card={"card"} rank={numChecker(item)} suit={suitChecker(item.substring(item.length - 1))}></Card></li>))}
+        </ul>
     )
 }
+
+
 
 export default Hand
