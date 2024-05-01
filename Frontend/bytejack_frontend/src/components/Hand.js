@@ -1,43 +1,25 @@
-import Card from "./Card"
-import React from "react";
+import Card from "./Card";
+import { useState } from "react";
+import { numChecker, suitChecker } from "../utils/utils";
 
-const numChecker = (num) => {
-    if(num.length > 2)
-        return(num.substring(0, 2))
-    else
-        return(num.substring(0, 1))
-}
-
-const suitChecker = (suit) => {
-    if(suit === "♠")
-    {
-        return "spades"
-    }
-
-    else if(suit === "♥")
-    {
-        return "hearts"
-    }
-
-    else if(suit === "♦")
-    {
-        return "diams"
-    }
-
-    else if(suit === "♣")
-    {
-        return "clubs"
-    }
-}
-
-const Hand = ({cards = []}) => {   
-    return(
+const Hand = ({ cards }) => {
+  return (
+    <>
+      <div class="playingCards simpleCards ">
         <ul class="hand">
-            {cards.map(item =>(<li><Card card={"card"} rank={numChecker(item)} suit={suitChecker(item.substring(item.length - 1))}></Card></li>))}
+          {cards.map((item) => (
+            <li>
+              <Card
+                card={"card"}
+                rank={numChecker(item)}
+                suit={suitChecker(item.substring(item.length - 1))}
+              ></Card>
+            </li>
+          ))}
         </ul>
-    )
-}
+      </div>
+    </>
+  );
+};
 
-
-
-export default Hand
+export default Hand;

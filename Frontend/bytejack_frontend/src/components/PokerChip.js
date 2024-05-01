@@ -1,10 +1,8 @@
 import React from "react";
-import './cssfiles/PokerChip.css'
+import "./cssfiles/PokerChip.css";
 
-const PokerChip = ({color}) => {
-    return (
-        <div class={`pokerchip ${color}`}></div>
-    )
-}
+const PokerChip = ({ color }) => {
+  return <div class={`pokerchip ${color}`}></div>;
+};
 
-export default PokerChip
+export default PokerChip;
