@@ -9,7 +9,7 @@ services:
     ports:
       - "3000:3000"
   backend:
-    build: ./api
+    build: ./backend
     image: pp
     ports:
       - "5000:5000"
