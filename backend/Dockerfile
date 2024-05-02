@@ -9,7 +9,7 @@ WORKDIR /code
 # We install Flask and requests in the container using Pip
 RUN pip install flask
 RUN pip install shortuuid
-RUN pip install flas_socketio
+RUN pip install flask-socketio
 
 # We want port 5555 (Flask will be using this port) to be used outside the container
 EXPOSE 5000
