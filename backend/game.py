@@ -196,7 +196,7 @@ class BlackJackGame:
     
 
 
-
+"""
 p = Player('gas')
 q = Player('has')
 r = Player('pas')
@@ -220,5 +220,5 @@ b.updateState()
 
 print(b.getplayer_info())
 print(r.getChips())
-
+"""
 
