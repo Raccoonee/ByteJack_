@@ -33,6 +33,9 @@ class BlackJackGame:
         "playerTurn": "player1",
         "Dealer": {"hand": ["K♠", "10♥"]},
         "winners": ["player1", "player2"],
+        "losers": [],
+        "naturals": [],
+        push: [],
         "Players": {
             "player1": {"name": "Bob", "chips": 100, "hand": ["K♠", "10♥"], "bet": 10},
             "player2": {"name": "Bob", "chips": 100, "hand": ["K♠", "10♥"], "bet": 10},
@@ -108,6 +111,7 @@ class BlackJackGame:
             for player_num, player in self.players.items():
                 if player_num not in losers:
                     player.addChips(int(self.gameState["players"]["player_num"]["bet"])) #win paid
+                    self.gameState["winners"].append(player_num)
 
         #dealer has a blackjack so all players without one lose and those with one push
         elif dealer_total == 21:
@@ -116,6 +120,10 @@ class BlackJackGame:
                 if player_num not in losers:
                     if player.getTotal() != 21:
                         player.removeChips(int(self.gameState["players"]["player_num"]["bet"])) #lose bet
+                    else:
+                        self.gameState["push"].append(player_num)
+
+        
         elif dealer_total < 21:
             for player in self.players.values():
                 player_total = player.getTotal()
