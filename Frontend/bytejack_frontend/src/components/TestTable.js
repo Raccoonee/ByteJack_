@@ -26,9 +26,8 @@ const test = {
 
 const TestTable = () => {
   useEffect(() => {
-    // fetch('http://api:5001/ppp')
-    // .then(response => response.json())
-    // .then(data => console.log(data));
+    fetch('http://localhost:8080/').then(response => response.json())
+    .then(data => console.log(data));
   }, []);
   return (
     <>

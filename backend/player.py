@@ -81,11 +81,11 @@ class Dealer:
         return self.total
     
 
-x = {
-    'car':'orange',
-    'fsdd':'ecece'
-}
+# x = {
+#     'car':'orange',
+#     'fsdd':'ecece'
+# }
 
 
-for k,v in x.items():
-    print(k,v)
+# for k,v in x.items():
+#     print(k,v)
