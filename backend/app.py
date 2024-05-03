@@ -1,3 +1,6 @@
+# https://flask-socketio.readthedocs.io/en/latest/index.html
+
+
 from flask import Flask, render_template, session
 from flask_socketio import join_room, leave_room, SocketIO, emit
 import random
