@@ -1,10 +1,10 @@
 # https://flask-socketio.readthedocs.io/en/latest/index.html
 
 
-from flask import Flask, render_template, session
+from flask import Flask, session, request
 from flask_socketio import join_room, leave_room, SocketIO, emit
 import random
-from game import BlackJackGame
+from game2 import Game
 from string import ascii_uppercase
 import shortuuid
 from player import Player
@@ -19,7 +19,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
 socketio = SocketIO(app)
 
-games = {} #gameID:BlackJackGame
+rooms = {} #gameID:BlackJackGame
 
 
 #what is happening when the game is finally over, we know tthat when the dealer goes, it's finally over.
@@ -28,19 +28,6 @@ games = {} #gameID:BlackJackGame
 #maybe when a player disconnets a new ai player is put there ot finish the game if there are other players
 #just an interesting thought
 #remember you can remove a player using the remove player funciton.
-def leave_bj_room():
-    """
-    leave_bj_room()
-    removes player from the room they are in
-    """
-    game = session["room"]
-    game.remove_player()
-    leave_room(game.get_code())
-
-@app.route("/")
-def index():
-    return("conn!!")
-
 
 """
 LOGIC:
@@ -52,70 +39,105 @@ return the new game state plus whose turn it is.
 
 then we have another endpoint event thing that hits or stands for all players. check logic for busted.
 """
+def join_game():
+    code = session["room"]
+    player = session["player"]
+    rooms[code].add_player(player)
 
+def leave_game():
+    code = session["room"]
+    player = session["player"]
+    rooms[code].remove_player(player)
 
-#TODO: game already generates its own id that we can ask for...
-@socketio.on("connect") #use a queue to do stuff
-def connect(data): #idk about the authenticating thing
-    #make an id...messed up logic. im pretty sure that the person id should not be
-    added = False
-    id = shortuuid.uuid() #maybe change this
-    player_id = data['player_id']
-    while id in games:
-        id = shortuuid.uuid()
-
-    #make them a player and try to connect them to existing game
-    # for dictkey in dict.keys():  
-    #     print(dict[dictkey])
-    player = Player(player_id)
-
-    for game in games.values():
-        if not game.isFull() and not game.inProgress() and not player_id in game.getPlayers(): #after implementing login, we can assign id to incoming player based on login info
-            game.addPlayer(player)
-            added = True
+def generate_code():
+    while True:
+        code = ""
+        for _ in range(4):
+            code += random.choice(ascii_uppercase)
+        if code not in rooms:
             break
-    
-    #make new game if none available
-    if not added:
-        newGame = BlackJackGame(id)
-        games[id] = newGame
-        # session['game'] = newGame
-        response_data = {
-            "player" : player.getID(),
-            "game" : id
-        }
-        emit("assigned_game", response_data, broadcast = True) #the point is that the players shouls be connected to a game.
+    return code
 
-#players placing their bets
-@socketio.on("place bet")
-def placeBet(data):
-    #will use sent data to check the game instead of session
-    game = games[data['gameID']]
-    player = data['player']
-    bet = data['bet']
+def make_game():
+    code = generate_code()
+    rooms[code] = Game()
+    return code
 
-    newState = game.setBet(player, bet)
-    # if all bets have been placed then deal cards to players and send back game state and whose turn it is
-    if game.allBetsPlaced(): #uh maybe we should do something if this returns false
-        newState = game.start()
-        emit("game_start", newState) #do we just keep going when someone defines the 
-    emit("bet_placed", newState, broadcast=True)
+def get_code():
+    for code in rooms.keys():
+        if not rooms[code].is_full():
+            return code
+    return make_game()
+        
+def get_name():
+    name = ""
+    for _ in range(10):
+        name += random.choice(ascii_uppercase)
+    return name
 
-#players take turns and dealer takes turns once everybody has taken a turn
-@socketio.on("next turn")
-def playerTurn(data):
-    action = data['action']
-    player = data['player']
-    game = games[data['gameID']]
-    #based on player and action, perform it and return game state
-    newState = game.playerTurn(player, action)
-    emit(newState, broadcast = True)
+@socketio.on("connect")
+def connect():
+    code = get_code()
+    name = get_name()
+    id = request.sid
+    session["room"] = code
+    session["player"] = Player(name, id)
+    join_game()
+    join_room(code)
+    message = rooms[code].get_game_state()
+    emit("update", message, to=code)
 
+@socketio.on("disconnect")
+def disconnect():
+    code = session["room"]
+    leave_game()
+    leave_room(code)
+    emit("disconnect", to=code)
 
-@socketio.on("disconnect") #i think this is 
-def disconnect(data):
-    leave_bj_room() # maybe replace player with ai player for that round and then take them out when round is done.
+@socketio.on("bet")
+def bet(data):
+    code = session["room"]
+    rooms[code].bet(session["player"], data["CHANGE TO NAME OF DICT KEY"])
+    message = rooms[code].get_game_state()
+    emit("update", message, to=code)
 
+@socketio.on("hit")
+def hit():
+    code = session["room"]
+    rooms[code].hit(session["player"])
+    message = rooms[code].get_game_state()
+    emit("update", message, to=code)
+
+@socketio.on("stand")
+def stand():
+    code = session["room"]
+    rooms[code].stand(session["player"])
+    message = rooms[code].get_game_state()
+    emit("update", message, to=code)
+
+# #TODO: game already generates its own id that we can ask for...
+# @socketio.on("connect") #use a queue to do stuff
+# def connect(data): #idk about the authenticating thing
+#     testData = {
+#   "gameID": 12345,
+#   "playerTurn": "player1",
+#   "Dealer": { "hand": ["K♠", "2♣", "3♦"] },
+#   "winners": ["player1", "player2"],
+#   "Players": {
+#     "player1": {
+#       "name": "Jeremiah",
+#       "chips": 100,
+#       "hand": ["A♥", "A♦", "A♠", "2♣"],
+#       "bet": 10,
+#     },
+#     "player2": { "name": "Dexter", "chips": 100, "hand": ["K♠", "10♥"], "bet": 10 },
+#     "player3": { "name": "Devin", "chips": 100, "hand": ["K♠", "8♥"], "bet": 10 },
+#     "player4": { "name": "Ethan", "chips": 100, "hand": ["Q♠", "9♥"], "bet": 10 },
+#     "player5": { "name": "Matt", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 },
+#   }
+# }
+#     emit("fooEvent", testData) 
+ 
 
 
 if __name__ == "__main__":

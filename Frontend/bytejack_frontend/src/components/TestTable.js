@@ -1,11 +1,12 @@
 import "./cssfiles/TestTable.css";
 import ChipsSection from "./ChipsSection.js";
 import Actions from "./Actions.js";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Player from "./Player";
 import Dealer from "./Dealer";
+import axios from 'axios';
 
-const test = {
+const testData = {
   gameID: 12345,
   playerTurn: "player1",
   Dealer: { hand: ["K♠", "2♣", "3♦"] },
@@ -24,56 +25,77 @@ const test = {
   },
 };
 
-const TestTable = () => {
+const TestTable = ( {socket }) => {
+  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [gameState, setGameState] = useState(testData);
+  
   useEffect(() => {
-    fetch('http://localhost:8080/').then(response => response.json())
-    .then(data => console.log(data));
+    // axios.get('/test1')
+    // .then(res => {
+    //   console.log(res.data)
+    // })
+
+    const onConnect=() => {
+      setIsConnected(true);
+    }
+    
+    const onUpdate=(value) => {
+      setGameState(value);
+      console.log(value)
+    }
+
+    socket.connect("connect", onUpdate)
+    socket.on('update', onUpdate)
+
   }, []);
   return (
     <>
       <div class="parent">
         <div class="div1">
           <Player
-            name={test.Players.player1.name}
-            bet={test.Players.player1.bet}
-            hand={test.Players.player1.hand}
+            name={gameState != undefined ? gameState.Players.player1.name : testData.Players.player1.name}
+            bet={gameState != undefined ? gameState.Players.player1.bet : testData.Players.player1.bet}
+            hand={gameState != undefined ? gameState.Players.player1.hand : testData.Players.player1.hand}
           ></Player>
         </div>
         <div class="div2">
           <Player
-            name={test.Players.player2.name}
-            bet={test.Players.player2.bet}
-            hand={test.Players.player2.hand}
+            name={gameState != undefined ? gameState.Players.player2.name : testData.Players.player2.name}
+            bet={gameState != undefined ? gameState.Players.player2.bet : testData.Players.player2.bet}
+            hand={gameState != undefined ? gameState.Players.player2.hand : testData.Players.player2.hand}
           ></Player>
         </div>
         <div class="div3">
-          <Actions></Actions>
+          <Actions 
+            socket={socket}
+            gameState={gameState}
+          ></Actions>
         </div>
         <div class="div4">
-          <Dealer dealerHand={test.Dealer.hand}></Dealer>
+          <Dealer dealerHand={gameState != undefined ? gameState.Dealer.hand : testData.Dealer.hand}></Dealer>
         </div>
         <div class="div5">
-          <ChipsSection data={test.Players}></ChipsSection>
+          <ChipsSection></ChipsSection>
         </div>
         <div class="div6">
           <Player
-            name={test.Players.player3.name}
-            bet={test.Players.player3.bet}
-            hand={test.Players.player3.hand}
+            name={gameState != undefined ? gameState.Players.player3.name : testData.Players.player3.name}
+            bet={gameState != undefined ? gameState.Players.player3.bet : testData.Players.player3.bet}
+            hand={gameState != undefined ? gameState.Players.player3.hand : testData.Players.player3.hand}
           ></Player>
         </div>
         <div class="div7">
           <Player
-            name={test.Players.player4.name}
-            bet={test.Players.player4.bet}
-            hand={test.Players.player4.hand}
+            name={gameState != undefined ? gameState.Players.player4.name : testData.Players.player4.name}
+            bet={gameState != undefined ? gameState.Players.player4.bet : testData.Players.player4.bet}
+            hand={gameState != undefined ? gameState.Players.player4.hand : testData.Players.player4.hand}
           ></Player>
         </div>
         <div class="div8">
           <Player
-            name={test.Players.player5.name}
-            bet={test.Players.player5.bet}
-            hand={test.Players.player5.hand}
+            name={gameState != undefined ? gameState.Players.player5.name : testData.Players.player5.name}
+            bet={gameState != undefined ? gameState.Players.player5.bet : testData.Players.player5.bet}
+            hand={gameState != undefined ? gameState.Players.player5.hand : testData.Players.player5.hand}
           ></Player>
         </div>
       </div>

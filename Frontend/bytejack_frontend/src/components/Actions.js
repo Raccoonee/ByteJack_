@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import "./cssfiles/Actions.css";
 
-const Actions = () => {
+const Actions = ({ socket, gameState }) => {
   const [formData, setFormData] = useState("");
 
   const handleChange = (event) => {
@@ -9,19 +10,33 @@ const Actions = () => {
   };
 
   const handleBet = (event) => {
-    event.preventDefault();
-    // api socket call to send user bet
-    alert(`${formData}`);
+    // event.preventDefault();
+    // // api socket call to send user bet
+    // alert(`${formData}`);
+
+    if(Number.isInteger(event) && event > 0) {
+      socket.emit("bet", event)
+    }
   };
+
+
+  const handleHit = () => {
+    socket.emit("hit")
+
+  }
+
+  const handleStand = () => {
+    socket.emit("stand")
+  }
 
   return (
     <div className="center">
       <span>
         <div className="padding">
-          <button class="button-30" role="button">
+          <button class="button-30" role="button" onClick={handleHit}>
             Hit
           </button>
-          <button class="button-30" role="button">
+          <button class="button-30" role="button" onClick={handleStand}>
             Stand
           </button>
         </div>
