@@ -106,7 +106,7 @@ class Game():
                         self.data["losers"].append("player" + str(i+1))
                         player.lose()
                     else:
-                        aself.data["winners"].append("player" + str(i+1))
+                        self.data["winners"].append("player" + str(i+1))
                         player.win()
         else:
             for player in self.players:
@@ -116,8 +116,9 @@ class Game():
                     else:
                         self.data["winners"].append("player" + str(i+1))
                         player.win()
+        self.inProgress = False
 
-          
+
     
     def get_game_state(self):
         self.data["Dealer"]["hand"] = self.dealer.get_hand()
@@ -136,6 +137,6 @@ class Game():
 
             else:
                 self.data["Players"][id] = {
-                     #"name": "Matt", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 
+                     "name": "Matt", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 
                 } #returns an empty dict if player dosn't exist instead of dummy data
         return self.data

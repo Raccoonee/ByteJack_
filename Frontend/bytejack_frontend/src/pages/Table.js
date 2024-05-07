@@ -1,14 +1,15 @@
-import "./cssfiles/TestTable.css";
-import ChipsSection from "./ChipsSection.js";
-import Actions from "./Actions.js";
+import ".components/cssfiles/TestTable.css";
+import ChipsSection from ".components/ChipsSection.js";
+import Actions from ".components/Actions.js";
 import React, { useEffect, useState } from "react";
 import { testData } from '../utils/testdata.js'
-import Player from "./Player";
-import Dealer from "./Dealer";
+import { socket } from './utils/socket.js'
+import Player from ".components/layer";
+import Dealer from ".components//Dealer";
 import axios from 'axios';
 
 
-const Table = ({socket }) => {
+const Table = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [gameState, setGameState] = useState(undefined);
   

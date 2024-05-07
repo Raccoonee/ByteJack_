@@ -15,6 +15,8 @@ class Player():
         return self.betAmount
     def get_name(self):
         return self.name
+    def get_chips(self):
+        return self.chips
     def get_id(self):
         return self.id
     def get_hand(self):

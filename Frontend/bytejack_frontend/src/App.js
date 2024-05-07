@@ -1,22 +1,24 @@
 import './App.css';
 import Table from './components/Table.js'
-import { socket } from './utils/socket.js'
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from "./pages/Home.js"
+import Table from "./pages/Table.js"
+
 
 
 function App() {
-  const [joinedGame, setJoinedGame] = useState(false)
-
-  const handleJoin = () => {
-    setJoinedGame(true)
-  }
 
   return (
     <>
-      {joinedGame === true ? <Table socket={socket} setJoinedGame={setJoinedGame}></Table> :
-       <button onClick={handleJoin}>
-       join
-      </button> }
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="table" element={<Table></Table>} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </>
     
   );

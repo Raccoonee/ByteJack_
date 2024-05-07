@@ -11,8 +11,8 @@ RUN pip install flask
 RUN pip install flask_socketio
 RUN pip install shortuuid
 
-# We want port 5000 (the default Flask port) to be used outside the container
-EXPOSE 5001
+# We want port 8080 (the default Flask port) to be used outside the container
+EXPOSE 8080
 
 # We copy everything in the current directory on our machine 
 # ... into the working directory in the container 
