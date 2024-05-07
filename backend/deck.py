@@ -26,20 +26,22 @@ class Deck:
     
     def __init__(self):
         #card unicodes are U + string
-        self.deck = [num for num in range(52)]
-        self.cardToString = ["A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠",
+        #self.deck = [num for num in range(52)]
+        self.deck = ["A♠", "2♠", "3♠", "4♠", "5♠", "6♠", "7♠", "8♠", "9♠", "10♠",
                      "J♠", "Q♠", "K♠", "A♦", "2♦", "3♦", "4♦", "5♦", "6♦", "7♦",
                      "8♦", "9♦", "10♦", "J♦", "Q♦", "K♦", "A♣", "2♣", "3♣", "4♣",
                      "5♣", "6♣", "7♣", "8♣", "9♣", "10♣", "J♣", "Q♣", "K♣", "J♥",
                      "2♥", "3♥", "4♥", "5♥", "6♥", "7♥", "8♥", "9♥", "10♥", "J♥",
                      "Q♥", "K♥"]
+        self.shuffle()
 
         for i in range(len(self.deck)):
             self.deck[i] = Card(self.deck[i])
         # i think we should load a deck everytime we need to
 
     def get_string(self, cardNum): #get string format
-        return self.cardToString[cardNum]
+        #return self.cardToString[cardNum]
+        pass
 
     def get_suit(self, cardNum): # clubs or spades ::: maybe we won't use this often
         pass
@@ -58,6 +60,10 @@ class Deck:
 
     def pop(self):
         if len(self.deck) >= 1:
+            return self.deck.pop()
+        else:
+            self.addDeck(1)
+            self.shuffle()
             return self.deck.pop()
         
     def addDeck(self, i):

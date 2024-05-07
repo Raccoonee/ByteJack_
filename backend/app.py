@@ -6,7 +6,6 @@ from flask_socketio import join_room, leave_room, SocketIO, emit
 import random
 from game2 import Game
 from string import ascii_uppercase
-import shortuuid
 from player import Player
 
 """
@@ -60,12 +59,12 @@ def generate_code():
 
 def make_game():
     code = generate_code()
-    rooms[code] = Game()
+    rooms[code] = Game(code)
     return code
 
 def get_code():
     for code in rooms.keys():
-        if not rooms[code].is_full():
+        if not rooms[code].is_full() and not rooms[code].in_progress():
             return code
     return make_game()
         
@@ -97,9 +96,15 @@ def disconnect():
 @socketio.on("bet")
 def bet(data):
     code = session["room"]
-    rooms[code].bet(session["player"], data["CHANGE TO NAME OF DICT KEY"])
+    rooms[code].bet(session["player"], data["bet"]) #should send 
     message = rooms[code].get_game_state()
     emit("update", message, to=code)
+
+    if rooms[code].all_bets_placed():
+        rooms[code].deal()
+        message2 = rooms[code].get_game_state()
+        emit("update", message2, to=code)
+
 
 @socketio.on("hit")
 def hit():
