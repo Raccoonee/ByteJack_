@@ -10,12 +10,9 @@ const Actions = ({ socket, gameState }) => {
   };
 
   const handleBet = (event) => {
-    // event.preventDefault();
-    // // api socket call to send user bet
-    // alert(`${formData}`);
-
     if(Number.isInteger(event) && event > 0) {
       socket.emit("bet", event)
+      event.preventDefault();
     }
   };
 

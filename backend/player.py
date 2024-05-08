@@ -4,7 +4,7 @@ class Player():
         self.id = id
         self.hand = [] #contains integers
         self.betAmount = 0
-        self.handVal = []
+        self.handVal = [] # contains integers
         self.total = 0
         self.chips = 2500
     def clear_bet(self):
@@ -34,13 +34,21 @@ class Player():
         else:
             val = 10
         self.total += val
+        self.handVal.append(val)
 
         # if total is over 21, check to see if they have an ace and change it
         if self.total > 21:
-            for i in len(self.handVal):
-                if self.handVal[i] == 11:
-                    self.handVal[i] = 1
+            for value in self.handVal:
+                if value == 11:
+                    self.handVal.remove(11)
+                    self.handVal.append(1)
                     self.total -= 10
+                    return
+
+            # for i in len(self.handVal):
+            #     if self.handVal[i] == 11:
+            #         self.handVal[i] = 1
+            #         self.total -= 10
         
     def get_total(self):
         return self.total

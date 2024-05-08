@@ -46,7 +46,7 @@ class BlackJackGame:
         """
 
     #sets the bet for each player to what client specified. --does not check to see if bet is possible
-    def setBet(self, player,  bet):
+    def bet(self, player,  bet):
         self.player_info[player]["bet"] = bet
         self.updateState()
         return self.gameState
