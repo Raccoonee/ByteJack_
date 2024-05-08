@@ -75,10 +75,10 @@ class Game():
             for p in self.players.keys():
                 if self.players[p]["name"] != "":
                     self.players[p].add_to_hand(self.deck.pop())
-                if i == 1:
-                    self.playerTurn.put(player)
-                    if player.get_total() == 21:
-                        self.data["naturals"].append("player" + str(self.players.index(player) + 1)) # if a player gets a natural blackjack
+                # if i == 1:
+                #     self.playerTurn.put(player)
+                #     if player.get_total() == 21:
+                #         self.data["naturals"].append("player" + str(self.players.index(player) + 1)) # if a player gets a natural blackjack
             self.dealer.add_to_hand(self.deck.pop())
         self.next_turn()
     
