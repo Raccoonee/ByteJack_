@@ -8,7 +8,7 @@ class Game():
         self.id = code
         self.playerTurn = Queue(maxsize=5) #we will popo from this so we know whose turn it is
         self.currentPlayer = ""
-        self.players = {"player1":None, "player2":None, "player3":None, "player4":None, "player5":None} #list of player objects
+        self.players = {} #list of player objects
         self.dealer = Player("dealer", "0") #dealer is a dummy player
         self.deck = Deck() #deck to be used in current game
         self.deck.shuffle()
@@ -45,8 +45,15 @@ class Game():
         self.players["player" + str(len(self.players) + 1)] = player
 
     def remove_player(self, player):
-        self.players.remove(player)
-        #self.players[player] = None
+        removePlayers = []
+        for key in self.players.keys():
+            if self.players[key] == player:
+                removePlayers.append[key]
+        for play in removePlayers:
+            del self.players[play]
+                #self.players[key] = ""
+        #you should reassign all players in remove functino once somebody is removed such that the add function still works
+
 
     def bet(self, player, amount):
         player.add_bet(amount)
@@ -91,7 +98,7 @@ class Game():
         self.deal()
         self.has_natural()
         #TODO: make queue too
-        for i in range(5,0,-1):
+        for i in range(5,0,-1):\
             self.playerTurn.put("player" + str(i))
 
 
@@ -172,7 +179,7 @@ class Game():
             i += 1
 
         while i < 5:
-            self.data["Players"]["player" + str(i)] = {
+            self.data["Players"]["player" + str(i+1)] = {
                     "name": "", "chips": 0, "hand": [], "bet": 0
             } #returns an empty dict if player dosn't exist instead of dummy data
             i += 1

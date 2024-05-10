@@ -100,6 +100,8 @@ def bet(data):
     message = rooms[code].get_game_state()
     emit("update", message, to=code)
 
+
+    ##move this to the backend
     if rooms[code].all_bets_placed():
         rooms[code].deal()
         message2 = rooms[code].get_game_state()

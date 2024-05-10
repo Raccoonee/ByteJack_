@@ -11,7 +11,7 @@ import axios from 'axios';
 
 const Table = () => {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const [gameState, setGameState] = useState(undefined);
+  const [gameState, setGameState] = useState(testData);
   
   useEffect(() => {
     const onConnect=() => {
@@ -24,7 +24,7 @@ const Table = () => {
       console.log(value)
     }
 
-    socket.connect("connect", onUpdate)
+    socket.on("connect")
     socket.on("update", onUpdate)
   }, []);
 
