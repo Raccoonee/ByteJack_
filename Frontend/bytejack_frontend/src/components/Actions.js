@@ -11,8 +11,7 @@ const Actions = ({ socket, gameState }) => {
 
   const handleBet = (event) => {
     if(Number.isInteger(event) && event > 0) {
-      socket.emit("bet", event)
-      event.preventDefault();
+      socket.emit("bet", {bet: event})
     }
   };
 

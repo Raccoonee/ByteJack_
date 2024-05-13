@@ -48,35 +48,51 @@ class Game():
         removePlayers = []
         for key in self.players.keys():
             if self.players[key] == player:
-                removePlayers.append[key]
+                removePlayers.append(key)
+                spot = int(key[-1])
+
         for play in removePlayers:
             del self.players[play]
+
+        if len(self.players) == 0:
+            self.isBetPhase = True
+        
+        #reassign all remaining players that are displaced to be one less to maintain game
+
+
+        # for id in self.players.keys():
+        #     check = int(id[-1])
+        #     if check > spot:
+        #         self.players["player" + str(check-1)] = self.players[id]
+        #         del self.players[id]
+
+                # removePlayers.append[key]
+        
                 #self.players[key] = ""
         #you should reassign all players in remove functino once somebody is removed such that the add function still works
 
 
     def bet(self, player, amount):
-        player.add_bet(amount)
+        player.add_bet(int(amount))
 
     def in_progress(self): #necessary?
-        return self.isBetPhase
+        return not self.isBetPhase
     
     def hit(self, player):
-        if self.isBetPhase() or player != self.get_current_player():
-            return
-        player.add_to_hand(self.deck.pop())
-        if player.get_total() > 21:
-            self.stand(player)
+        if not self.isBetPhase() and player == self.players[self.currentPlayer]:
+            player.add_to_hand(self.deck.pop())
+            if player.get_total() > 21:
+                self.stand(player)
 
     def stand(self, player):
-        i = self.players.index(player) + 1
-        if player.get_total() > 21:
-            self.data["busts"].append("player" + str(i))
-        self.next_turn()
+        if player == self.players[self.currentPlayer]:
+            if player.get_total() > 21:
+                self.data["busts"].append(id)
+            self.next_turn()
     
     #deals 2 cards to each player and starts with the player on the right
     def deal(self):
-        self.isBetPhase = True
+        self.isBetPhase = False
 
         for i in range(2):
             for p in self.players.keys():
@@ -127,7 +143,7 @@ class Game():
             self.data["playerTurn"] = "dealer"
         else:
             p = self.playerTurn.get()
-            while self.players[p] == None:
+            while not self.players[p]:
                 p = self.playerTurn.get()
             self.data["playerTurn"] = p
             self.currentPlayer = p
@@ -158,7 +174,7 @@ class Game():
                     else:
                         self.data["winners"].append(id)
                         player.win()
-        self.isBetPhase = False
+        self.isBetPhase = True
 
 
     

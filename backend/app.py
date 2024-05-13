@@ -75,7 +75,7 @@ def get_name():
     return name
 
 @socketio.on("connect")
-def connect():
+def connect(data):
     code = get_code()
     name = get_name()
     id = request.sid
@@ -84,6 +84,7 @@ def connect():
     join_game()
     join_room(code)
     message = rooms[code].get_game_state()
+    message["rooms"] = list(rooms.keys())
     emit("update", message, to=code)
 
 @socketio.on("disconnect")
@@ -98,6 +99,7 @@ def bet(data):
     code = session["room"]
     rooms[code].bet(session["player"], data["bet"]) #should send 
     message = rooms[code].get_game_state()
+    message["rooms"] = list(rooms.keys())
     emit("update", message, to=code)
 
 
@@ -105,6 +107,7 @@ def bet(data):
     if rooms[code].all_bets_placed():
         rooms[code].deal()
         message2 = rooms[code].get_game_state()
+        message["rooms"] = list(rooms.keys())
         emit("update", message2, to=code)
 
 
@@ -113,6 +116,7 @@ def hit():
     code = session["room"]
     rooms[code].hit(session["player"])
     message = rooms[code].get_game_state()
+    message["rooms"] = list(rooms.keys())
     emit("update", message, to=code)
 
 @socketio.on("stand")
@@ -120,6 +124,7 @@ def stand():
     code = session["room"]
     rooms[code].stand(session["player"])
     message = rooms[code].get_game_state()
+    message["rooms"] = list(rooms.keys())
     emit("update", message, to=code)
 
 # #TODO: game already generates its own id that we can ask for...
