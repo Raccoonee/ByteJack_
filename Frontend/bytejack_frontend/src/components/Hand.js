@@ -1,5 +1,4 @@
 import Card from "./Card";
-import { useState } from "react";
 import { numChecker, suitChecker } from "../utils/utils";
 
 const Hand = ({ cards }) => {

@@ -6,6 +6,10 @@
   grid-row-gap: 0px;
 }
 
+.root {
+  background-color: #006400;
+}
+
 .div1 {
   grid-area: 3 / 1 / 5 / 3;
 }

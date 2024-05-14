@@ -1,4 +1,4 @@
-import "../components/cssfiles/TestTable.css";
+import "./Table.css";
 import ChipsSection from "../components/ChipsSection.js";
 import Actions from "../components/Actions.js";
 import React, { useEffect, useState } from "react";
@@ -6,18 +6,13 @@ import { testData } from '../utils/testdata.js'
 import { socket } from '../utils/socket.js'
 import Player from "../components/Player.js";
 import Dealer from "../components/Dealer.js";
-import axios from 'axios';
+// import axios from 'axios';
 
 
 const Table = () => {
-  const [isConnected, setIsConnected] = useState(socket.connected);
   const [gameState, setGameState] = useState(testData);
   
   useEffect(() => {
-    const onConnect=() => {
-      setIsConnected(true);
-    }
-    
     const onUpdate=(value) => {
       setGameState(value);
       console.log(gameState)
@@ -26,7 +21,7 @@ const Table = () => {
 
     socket.on("connect")
     socket.on("update", onUpdate)
-  }, []);
+  }, [gameState]);
 
   return (
     <>

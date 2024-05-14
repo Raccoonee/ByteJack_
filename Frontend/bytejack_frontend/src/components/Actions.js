@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState } from "react";
 import "./cssfiles/Actions.css";
 
-const Actions = ({ socket, gameState }) => {
+const Actions = ({ socket }) => {
   const [formData, setFormData] = useState("");
 
   const handleChange = (event) => {
@@ -29,10 +28,10 @@ const Actions = ({ socket, gameState }) => {
     <div className="center">
       <span>
         <div className="padding">
-          <button class="button-30" role="button" onClick={handleHit}>
+          <button class="button-30" onClick={handleHit}>
             Hit
           </button>
-          <button class="button-30" role="button" onClick={handleStand}>
+          <button class="button-30" onClick={handleStand}>
             Stand
           </button>
         </div>
