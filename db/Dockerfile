@@ -16,7 +16,7 @@ COPY setup.sql /docker-entrypoint-initdb.d
 
 # The ENV command in a dockerfile sets an environment variable
 
-ENV MYSQL_ROOT_PASSWORD=nunuiscute6933
+ENV MYSQL_ROOT_PASSWORD=rotmgbestgame
 
 # Port 3306 is the default port used by MySQL
 EXPOSE 3306
