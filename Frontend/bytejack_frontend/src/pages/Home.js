@@ -5,8 +5,8 @@ import BasicModal from "../components/BasicModal";
 
 const Home = () => {
   const userData = {
-    Players: ["Jeremiah", "Desmond"],
-    Passwords: ["1234", "4321"],
+    Players: ["Jeremiah", "Desmond", "devin"],
+    Passwords: ["1234", "4321", '1234'],
   };
 
   const [formData, setFormData] = useState({

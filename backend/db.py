@@ -13,19 +13,31 @@ class DB:
     def run_insertion(self, query):
         self.cursor.execute(query)
         self.cnx.commit()
+
+    def run_select(self, query):
+        self.cursor.execute(query)
+        return self.cursor.fetchone()
     
-    def insert_player(self, credentials): #user, pass
+    def insert_player(self, username, password): #user, pass
         query = "INSERT into player " + str(self.generate_ID())
         query += ","
-        query += credentials[0]
+        query += username
         query += ","
-        query += credentials[1]
-        + ",15000"
+        query += password
+        + ",15000;"
         self.run_insertion(query)
+
+    def get_player(self, username, password):
+        query = "SELECT * FROM player WHERE username = "
+        query += username
+        query += " AND password = "
+        query += password
+        query += ";"
+        return self.run_select(query)
 
     def insert_hand(self, record): #playerid, roundid, bet, 
         query = "INSERT into hand "
-        for 
+
 
     def insert_round(self, record):
         query = "INSERT into round"

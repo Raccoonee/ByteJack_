@@ -7,13 +7,14 @@ import random
 from game2 import Game
 from string import ascii_uppercase
 from player import Player
+import db
 
 """
 TODO: implement what happens when people leave the game
 TODO: streamline logic for 
 """
 
-
+database = db.DB()
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
 socketio = SocketIO(app)
@@ -59,7 +60,7 @@ def generate_code():
 
 def make_game():
     code = generate_code()
-    rooms[code] = Game(code)
+    rooms[code] = Game(code, database)
     return code
 
 def get_code():
@@ -74,18 +75,50 @@ def get_name():
         name += random.choice(ascii_uppercase)
     return name
 
+@app.route("/devindevindevindevindevin/<username>/<password")
+def make_player(username, password):
+    database.insert_player(username, password)
+
 @socketio.on("connect")
 def connect(data):
+    player = database.get_player(data["username"], data["password"])
+    if player is None:
+        emit("failed connect", data, include_self=True)
+    else:
+        emit("connected", data, include_self=True)
+        join(player)
+
+def join_lobby():
+    lobby = "AAAA"
+    join_room(lobby)
+    session["room"] = lobby
+    
+def join_game():
+    pass
+    
+def get_rooms(player): #i changed this from join to get rooms because i am thinking that this is what we call when they log in and wanna see available rooms
     code = get_code()
-    name = get_name()
+
+def join(player):
+    code = 1
+    name = player["username"]
     id = request.sid
     session["room"] = code
-    session["player"] = Player(name, id)
+    session["player"] = Player(name, player["playerID"])
     join_game()
     join_room(code)
+    
+    message={
+        "rooms" : list(rooms.keys())
+    }
+    emit("update", message)
+
+
+@socketio.on("join")
+def join(data):
+    code = data["gameID"]
+    join_room(code)
     message = rooms[code].get_game_state()
-    message["rooms"] = list(rooms.keys())
-    emit("update", message, to=code)
 
 @socketio.on("disconnect")
 def disconnect():

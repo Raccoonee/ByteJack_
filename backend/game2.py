@@ -4,11 +4,13 @@ from queue import Queue
 
 
 class Game():
-    def __init__(self, code):
+    def __init__(self, code, database):
+        self.database = database
         self.id = code
         self.playerTurn = Queue(maxsize=5) #we will popo from this so we know whose turn it is
         self.currentPlayer = ""
         self.players = {} #list of player objects
+        self.removedPlayers = []
         self.dealer = Player("dealer", "0") #dealer is a dummy player
         self.deck = Deck() #deck to be used in current game
         self.deck.shuffle()
@@ -45,31 +47,14 @@ class Game():
         self.players["player" + str(len(self.players) + 1)] = player
 
     def remove_player(self, player):
-        removePlayers = []
         for key in self.players.keys():
             if self.players[key] == player:
-                removePlayers.append(key)
-                spot = int(key[-1])
+                self.removedPlayers.append(key)
 
-        for play in removePlayers:
-            del self.players[play]
-
-        if len(self.players) == 0:
+        if len(self.players) == len(self.removedPlayers):
             self.isBetPhase = True
-        
-        #reassign all remaining players that are displaced to be one less to maintain game
+            #we have to somehow redo the game thing. i.e. when a round ends what do we do..
 
-
-        # for id in self.players.keys():
-        #     check = int(id[-1])
-        #     if check > spot:
-        #         self.players["player" + str(check-1)] = self.players[id]
-        #         del self.players[id]
-
-                # removePlayers.append[key]
-        
-                #self.players[key] = ""
-        #you should reassign all players in remove functino once somebody is removed such that the add function still works
 
 
     def bet(self, player, amount):
@@ -143,8 +128,12 @@ class Game():
             self.data["playerTurn"] = "dealer"
         else:
             p = self.playerTurn.get()
-            while not self.players[p]:
-                p = self.playerTurn.get()
+            while not self.players[p] or p in self.removedPlayers:
+                if self.playerTurn.empty():
+                    p = "dealer"
+                    break
+                else:
+                    p = self.playerTurn.get()
             self.data["playerTurn"] = p
             self.currentPlayer = p
 
@@ -175,6 +164,7 @@ class Game():
                         self.data["winners"].append(id)
                         player.win()
         self.isBetPhase = True
+        #reset the game 
 
 
     

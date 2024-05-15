@@ -1,5 +1,5 @@
 class Player():
-    def __init__(self, name, id):
+    def __init__(self, name, id): #chnagr this to take player credentials and match it to somethign inn database
         self.name = name
         self.id = id
         self.hand = [] #contains integers
@@ -7,6 +7,7 @@ class Player():
         self.handVal = [] # contains integers
         self.total = 0
         self.chips = 2500
+
     def clear_bet(self):
         self.betAmount = 0
     def add_bet(self, bet):
