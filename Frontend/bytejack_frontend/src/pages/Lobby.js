@@ -1,6 +1,8 @@
 import React from "react";
 import "./Lobby.css"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useEffect } from "react-router-dom";
+import { socket } from "../utils/socket.js";
+
 
 const Lobby = () => {
     const navigate = useNavigate();
@@ -13,7 +15,9 @@ const Lobby = () => {
             <h1 class="bungee-spice-regular">
                 Available Lobbies
             </h1>
-            <button onClick={() => {navigate("/table")}}>Join</button>
+            <button onClick={() => {
+                navigate("/table")
+                }}>Join</button>
         </div>
         
     )

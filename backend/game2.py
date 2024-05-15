@@ -7,10 +7,10 @@ class Game():
     def __init__(self, code, database):
         self.database = database
         self.id = code
-        self.playerTurn = Queue(maxsize=5) #we will popo from this so we know whose turn it is
+        self.playerTurn = Queue(maxsize=5) #we will pop from this so we know whose turn it is
         self.currentPlayer = ""
         self.players = {} #list of player objects
-        self.removedPlayers = []
+        self.removedPlayers = [] #players that have disconnected
         self.dealer = Player("dealer", "0") #dealer is a dummy player
         self.deck = Deck() #deck to be used in current game
         self.deck.shuffle()
@@ -37,9 +37,13 @@ class Game():
                 "player2": { "name": "Dexter", "chips": 100, "hand": ["K♠", "10♥"], "bet": 10 },
                 "player3": { "name": "Devin", "chips": 100, "hand": ["K♠", "8♥"], "bet": 10 },
                 "player4": { "name": "Ethan", "chips": 100, "hand": ["Q♠", "9♥"], "bet": 10 },
-                "player5": { "name": "Matt", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 },
+                "player5": { "name": "Rajeera", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 },
             }
         }
+
+    def get_room(self):
+        return "eeee"
+    
     def get_current_player(self):
         return self.currentPlayer
 
@@ -66,7 +70,7 @@ class Game():
     def hit(self, player):
         if not self.isBetPhase() and player == self.players[self.currentPlayer]:
             player.add_to_hand(self.deck.pop())
-            if player.get_total() > 21:
+            if player.get_total() > 21 or player.doubledBet() == True:
                 self.stand(player)
 
     def stand(self, player):
@@ -83,10 +87,6 @@ class Game():
             for p in self.players.keys():
                 if self.players[p]["name"] != "":
                     self.players[p].add_to_hand(self.deck.pop())
-                # if i == 1:
-                #     self.playerTurn.put(player)
-                #     if player.get_total() == 21:
-                #         self.data["naturals"].append("player" + str(self.players.index(player) + 1)) # if a player gets a natural blackjack
             self.dealer.add_to_hand(self.deck.pop())
         self.next_turn()
     
@@ -98,7 +98,6 @@ class Game():
     def setup(self):
         self.deal()
         self.has_natural()
-        #TODO: make queue too
         for i in range(5,0,-1):\
             self.playerTurn.put("player" + str(i))
 
@@ -108,7 +107,7 @@ class Game():
         return self.playerTurn.full()
     
     def double(self, player):
-        pass #TODO: when the player doubles their bet then they only get one more try
+        player.add_bet(player.get_bet())
 
     def all_bets_placed(self):
         for p in self.players.values():
@@ -128,14 +127,17 @@ class Game():
             self.data["playerTurn"] = "dealer"
         else:
             p = self.playerTurn.get()
-            while not self.players[p] or p in self.removedPlayers:
-                if self.playerTurn.empty():
-                    p = "dealer"
-                    break
-                else:
-                    p = self.playerTurn.get()
-            self.data["playerTurn"] = p
-            self.currentPlayer = p
+            if p in self.removedPlayers:
+                    self.stand(p)
+            else:
+                while not self.players[p]:
+                    if self.playerTurn.empty():
+                        p = "dealer"
+                        break
+                    else:
+                        p = self.playerTurn.get()
+                self.data["playerTurn"] = p
+                self.currentPlayer = p
 
 
     #calculates winners and losers and pays when necessary

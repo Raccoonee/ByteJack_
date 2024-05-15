@@ -10,6 +10,8 @@ WORKDIR /code
 RUN pip install flask
 RUN pip install flask_socketio
 RUN pip install shortuuid
+RUN pip install mysql-connector-python
+
 
 # We want port 8080 (the default Flask port) to be used outside the container
 EXPOSE 8080

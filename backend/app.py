@@ -7,14 +7,20 @@ import random
 from game2 import Game
 from string import ascii_uppercase
 from player import Player
-import db
+try:
+    import db
+except:
+    pass
 
 """
 TODO: implement what happens when people leave the game
 TODO: streamline logic for 
 """
 
-database = db.DB()
+try:
+    database = db.DB()
+except:
+    pass
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
 socketio = SocketIO(app)
@@ -61,6 +67,7 @@ def generate_code():
 def make_game():
     code = generate_code()
     rooms[code] = Game(code, database)
+    lobby_message()
     return code
 
 def get_code():
@@ -75,50 +82,69 @@ def get_name():
         name += random.choice(ascii_uppercase)
     return name
 
-@app.route("/devindevindevindevindevin/<username>/<password")
+@app.route("/register/<username>/<password>")
 def make_player(username, password):
     database.insert_player(username, password)
+    return "successfully inserted"
 
-@socketio.on("connect")
-def connect(data):
-    player = database.get_player(data["username"], data["password"])
+@app.route("/login/<username>/<password>")
+def login(username, password):
+    player = database.get_player(username, password)
     if player is None:
-        emit("failed connect", data, include_self=True)
+        return "account doesn't exist"
     else:
-        emit("connected", data, include_self=True)
-        join(player)
+        session["player"] = Player(player[0]["playerID"], player[0]["username"])
+        join_lobby()
+        return "connected!"
+
+
+# @socketio.on("login")
+# def connect(data):
+#     player = database.get_player(data["username"], data["password"])
+#     if player is None:
+#         emit("failed login", data, include_self=True)
+#     else:
+#         emit("connected", data, include_self=True)
+#         session["player"] = Player(player[0]["playerID"], player[0]["username"])
+#         join_lobby()
 
 def join_lobby():
     lobby = "AAAA"
     join_room(lobby)
     session["room"] = lobby
-    
-def join_game():
-    pass
-    
-def get_rooms(player): #i changed this from join to get rooms because i am thinking that this is what we call when they log in and wanna see available rooms
-    code = get_code()
+    lobby_message()
 
-def join(player):
-    code = 1
-    name = player["username"]
-    id = request.sid
-    session["room"] = code
-    session["player"] = Player(name, player["playerID"])
-    join_game()
-    join_room(code)
-    
-    message={
-        "rooms" : list(rooms.keys())
-    }
-    emit("update", message)
+def lobby_message():
+    information = {"games":[]}
+    for key in rooms.keys():
+        information["games"].append(rooms[key])
+    emit("lobby", information, to="AAAA")
+
+# def join_game(data):
+#     code = 1
+#     name = player["username"]
+#     # id = request.sid
+#     session["room"] = data["code"]
+#     join_game())
+#     join_room(code)
+
+def change_room(room):
+    leave_room(session["room"])
+    session["room"] = room
+    join_room(room)
+    rooms[room].add_player(session["player"])
+
 
 
 @socketio.on("join")
 def join(data):
     code = data["gameID"]
+    if code == "new":
+        code = make_game()
     join_room(code)
+    change_room(code)
     message = rooms[code].get_game_state()
+    emit("join", message, to=code)
 
 @socketio.on("disconnect")
 def disconnect():
@@ -152,6 +178,14 @@ def hit():
     message["rooms"] = list(rooms.keys())
     emit("update", message, to=code)
 
+@socketio.on("double")
+def double():
+    code = session["room"]
+    rooms[code].double(session["player"])
+    message = rooms[code].get_game_state()
+    message["rooms"] = list(rooms.keys())
+    emit("update", message, to=code)
+
 @socketio.on("stand")
 def stand():
     code = session["room"]
@@ -178,7 +212,7 @@ def stand():
 #     "player2": { "name": "Dexter", "chips": 100, "hand": ["K♠", "10♥"], "bet": 10 },
 #     "player3": { "name": "Devin", "chips": 100, "hand": ["K♠", "8♥"], "bet": 10 },
 #     "player4": { "name": "Ethan", "chips": 100, "hand": ["Q♠", "9♥"], "bet": 10 },
-#     "player5": { "name": "Matt", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 },
+#     "player5": { "name": "Rajeera", "chips": 100, "hand": ["K♠", "A♥"], "bet": 10 },
 #   }
 # }
 #     emit("fooEvent", testData) 

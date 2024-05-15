@@ -4,6 +4,7 @@
 
 FROM mysql
 
+
 # I looked up information online about the MySQL image
 # That information tells me that if the container machine starts up
 #   and it finds no existing data, it will run any SQL files

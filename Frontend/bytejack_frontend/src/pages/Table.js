@@ -18,8 +18,10 @@ const Table = () => {
       console.log(value);
     };
 
-    socket.on("connect");
-    socket.on("update", onUpdate);
+
+    socket.on("join", () => {
+      socket.send({gameID: "new"})
+    })
   }, [gameState]);
 
   return (
@@ -32,6 +34,8 @@ const Table = () => {
                 name={gameState.Players.player1.name}
                 bet={gameState.Players.player1.bet}
                 hand={gameState.Players.player1.hand}
+                chips={gameState.Players.player1.chips}
+
               ></Player>
             ) : (
               "Empty"
@@ -43,6 +47,8 @@ const Table = () => {
                 name={gameState.Players.player2.name}
                 bet={gameState.Players.player2.bet}
                 hand={gameState.Players.player2.hand}
+                chips={gameState.Players.player2.chips}
+
               ></Player>
             ) : (
               "Empty"
@@ -59,7 +65,7 @@ const Table = () => {
             )}
           </div>
           <div class="div5">
-            <ChipsSection></ChipsSection>
+            <ChipsSection socket={socket}></ChipsSection>
           </div>
           <div class="div6">
             {gameState !== undefined ? (
@@ -67,6 +73,7 @@ const Table = () => {
                 name={gameState.Players.player3.name}
                 bet={gameState.Players.player3.bet}
                 hand={gameState.Players.player3.hand}
+                chips={gameState.Players.player3.chips}
               ></Player>
             ) : (
               "Empty"
@@ -78,6 +85,8 @@ const Table = () => {
                 name={gameState.Players.player4.name}
                 bet={gameState.Players.player4.bet}
                 hand={gameState.Players.player4.hand}
+                chips={gameState.Players.player4.chips}
+
               ></Player>
             ) : (
               "Empty"
@@ -89,6 +98,8 @@ const Table = () => {
                 name={gameState.Players.player5.name}
                 bet={gameState.Players.player5.bet}
                 hand={gameState.Players.player5.hand}
+                chips={gameState.Players.player5.chips}
+
               ></Player>
             ) : (
               "Empty"

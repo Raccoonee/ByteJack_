@@ -2,6 +2,8 @@ import "./Home.css";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "../components/BasicModal";
+import axios from "axios";
+import RegisterModal from "../components/RegisterModal";
 
 const Home = () => {
   const userData = {
@@ -19,22 +21,8 @@ const Home = () => {
 
   //Modal Component
   const [open, setOpen] = React.useState(false);
+  const [registerOpen, setResgisterOpen] = React.useState(false);
 
-  const validateUser = (userInfo, logInfo) => {
-    for (let i = 0; i < userInfo.Players.length; i++) {
-      if (logInfo.username === userInfo.Players[i]) {
-        if (logInfo.password === userInfo.Passwords[i]) {
-          navigate("/lobby");
-        } else {
-          console.log("Couldn't find user");
-
-          console.log(open);
-        }
-      }
-    }
-
-    setOpen(true);
-  };
 
   const handleRegistration = () => {
 
@@ -43,8 +31,16 @@ const Home = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    validateUser(userData, formData);
-    console.log("Form submitted with data:", formData);
+    axios
+      .post(
+        `http://backend:8080/login/${formData.username}/${formData.password}`
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   };
 
   const handleChange = (event) => {
@@ -100,14 +96,14 @@ const Home = () => {
             </button>
           </form>
 
-          <button class="button-82-register">
+          <button class="button-82-register" onClick={() => {setResgisterOpen(true)}}>
             <span class="button-82-shadow"></span>
             <span class="button-82-edge"></span>
             <span class="button-82-front text">Register</span>
           </button>
         </p>
-
-        {/* <BasicModal open={open} setOpen={setOpen}></BasicModal> */}
+        <RegisterModal registerOpen={registerOpen} setResgisterOpen={setResgisterOpen}></RegisterModal>
+        <BasicModal open={open} setOpen={setOpen}></BasicModal>
       </div>
     </>
   );

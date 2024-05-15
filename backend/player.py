@@ -7,11 +7,16 @@ class Player():
         self.handVal = [] # contains integers
         self.total = 0
         self.chips = 2500
+        self.doubled = False
 
     def clear_bet(self):
         self.betAmount = 0
     def add_bet(self, bet):
+        if self.betAmount == bet:
+            self.doubledBet == True
         self.betAmount += bet
+    def doubledBet(self):
+        return self.doubled
     def get_bet_amount(self):
         return self.betAmount
     def get_name(self):
