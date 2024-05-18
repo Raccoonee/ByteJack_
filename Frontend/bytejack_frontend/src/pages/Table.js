@@ -6,23 +6,31 @@ import { testData } from "../utils/testdata.js";
 import { socket } from "../utils/socket.js";
 import Player from "../components/Player.js";
 import Dealer from "../components/Dealer.js";
-// import axios from 'axios';
 
-const Table = () => {
-  const [gameState, setGameState] = useState(testData);
+const Table = ({ userData }) => {
+  const [gameState, setGameState] = useState(undefined);
+
+  const handleUpdate = (data) => {
+    setGameState(data)
+  }
+
+  const handleStatus = (data) => {
+    console.log(data)
+  }
+
+  const handleThisDick = (data) => {
+    console.log(data)
+  }
 
   useEffect(() => {
-    const onUpdate = (value) => {
-      setGameState(value);
-      console.log(gameState);
-      console.log(value);
-    };
+    socket.emit("join", {lobbyCode: userData.gameID})
+    socket.emit("penis")
 
-
-    socket.on("join", () => {
-      socket.send({gameID: "new"})
-    })
-  }, [gameState]);
+    socket.on("update", handleUpdate)
+    socket.on("status", handleStatus)
+    socket.on("penis", handleThisDick)
+    console.log(gameState)
+  }, []);
 
   return (
     <>
@@ -31,11 +39,10 @@ const Table = () => {
           <div class="div1">
             {gameState !== undefined ? (
               <Player
-                name={gameState.Players.player1.name}
-                bet={gameState.Players.player1.bet}
-                hand={gameState.Players.player1.hand}
-                chips={gameState.Players.player1.chips}
-
+                name={gameState.players.player1.name}
+                bet={gameState.players.player1.bet}
+                hand={gameState.players.player1.hand}
+                chips={gameState.players.player1.chips}
               ></Player>
             ) : (
               "Empty"
@@ -44,11 +51,10 @@ const Table = () => {
           <div class="div2">
             {gameState !== undefined ? (
               <Player
-                name={gameState.Players.player2.name}
-                bet={gameState.Players.player2.bet}
-                hand={gameState.Players.player2.hand}
-                chips={gameState.Players.player2.chips}
-
+                name={gameState.players.player2.name}
+                bet={gameState.players.player2.bet}
+                hand={gameState.players.player2.hand}
+                chips={gameState.players.player2.chips}
               ></Player>
             ) : (
               "Empty"
@@ -59,10 +65,11 @@ const Table = () => {
           </div>
           <div class="div4">
             {gameState !== undefined ? (
-              <Dealer dealerHand={gameState.Dealer.hand}></Dealer>
+              <Dealer dealerHand={gameState.dealer.hand}></Dealer>
             ) : (
               "Empty"
             )}
+            {userData.gameID}
           </div>
           <div class="div5">
             <ChipsSection socket={socket}></ChipsSection>
@@ -70,10 +77,10 @@ const Table = () => {
           <div class="div6">
             {gameState !== undefined ? (
               <Player
-                name={gameState.Players.player3.name}
-                bet={gameState.Players.player3.bet}
-                hand={gameState.Players.player3.hand}
-                chips={gameState.Players.player3.chips}
+                name={gameState.players.player3.name}
+                bet={gameState.players.player3.bet}
+                hand={gameState.players.player3.hand}
+                chips={gameState.players.player3.chips}
               ></Player>
             ) : (
               "Empty"
@@ -82,11 +89,10 @@ const Table = () => {
           <div class="div7">
             {gameState !== undefined ? (
               <Player
-                name={gameState.Players.player4.name}
-                bet={gameState.Players.player4.bet}
-                hand={gameState.Players.player4.hand}
-                chips={gameState.Players.player4.chips}
-
+                name={gameState.players.player4.name}
+                bet={gameState.players.player4.bet}
+                hand={gameState.players.player4.hand}
+                chips={gameState.players.player4.chips}
               ></Player>
             ) : (
               "Empty"
@@ -95,11 +101,10 @@ const Table = () => {
           <div class="div8">
             {gameState !== undefined ? (
               <Player
-                name={gameState.Players.player5.name}
-                bet={gameState.Players.player5.bet}
-                hand={gameState.Players.player5.hand}
-                chips={gameState.Players.player5.chips}
-
+                name={gameState.players.player5.name}
+                bet={gameState.players.player5.bet}
+                hand={gameState.players.player5.hand}
+                chips={gameState.players.player5.chips}
               ></Player>
             ) : (
               "Empty"

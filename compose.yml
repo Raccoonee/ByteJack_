@@ -13,11 +13,14 @@ services:
     image: pp
     ports:
       - "8080:8080"
+    depends_on:
+      - "db"
+    restart: on-failure
   db:
     build: ./db
     image: pppp
     ports:
-      - "8181:8181"
+      - "3306:3306"
 
 
 

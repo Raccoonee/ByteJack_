@@ -304,6 +304,32 @@ body
     outline: none;
     box-shadow: 0.2rem 0.8rem 1.6rem var(--colorPrimary600);
   }
+
+  .Input-text-modal {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    width: 300px;
+    height: 60px;
+    margin-top: 40px;
+    padding: var(--inputPaddingV) var(--inputPaddingH);
+    color: inherit;
+    font-family: inherit;
+    font-size: var(--inputFontSize);
+    font-weight: inherit;
+    line-height: var(--inputLineHeight);
+    border-radius: 0.4rem;
+    transition: box-shadow var(--transitionDuration);
+  }
+  
+  .Input-text-modal::placeholder {
+    color: #B0BEC5;
+  }
+  
+  .Input-text-modal:focus {
+    outline: none;
+    box-shadow: 0.2rem 0.8rem 1.6rem var(--colorPrimary600);
+  }
   
   .Input-label {
     display: block;

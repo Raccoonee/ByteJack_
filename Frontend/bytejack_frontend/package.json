@@ -16,6 +16,7 @@
     "react-draggable": "^4.4.6",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
+    "react-window": "^1.8.10",
     "socket.io-client": "^4.7.5",
     "web-vitals": "^2.1.4"
   },

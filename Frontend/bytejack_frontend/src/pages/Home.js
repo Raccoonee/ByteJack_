@@ -31,9 +31,26 @@ const Home = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    navigate("/lobby")
+
     axios
-      .post(
-        `http://backend:8080/login/${formData.username}/${formData.password}`
+      .get(
+        `/login/${formData.username}/${formData.password}`
+      )
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
+  const handleUsers = (event) => {
+    event.preventDefault();
+
+    axios
+      .get(
+        `/getUSERS`
       )
       .then(function (response) {
         console.log(response);
@@ -66,6 +83,7 @@ const Home = () => {
         />
 
         <h1 class="bungee-spice-regular">ByteJack</h1>
+        <button onClick={handleUsers}></button>
         <p>
           <form onSubmit={handleSubmit}>
             <div class="Wrapper Input">
@@ -96,7 +114,7 @@ const Home = () => {
             </button>
           </form>
 
-          <button class="button-82-register" onClick={() => {setResgisterOpen(true)}}>
+          <button class="button-82-pushable" onClick={() => {setResgisterOpen(true)}}>
             <span class="button-82-shadow"></span>
             <span class="button-82-edge"></span>
             <span class="button-82-front text">Register</span>

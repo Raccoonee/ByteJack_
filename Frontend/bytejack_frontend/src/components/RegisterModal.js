@@ -4,6 +4,8 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 const style = {
   position: "absolute",
@@ -23,18 +25,21 @@ const textStyle = {
   color: "darkred",
 };
 
-export default function RegisterModal({ registerOpen, setRegisterOpen }) {
+export default function RegisterModal({ registerOpen, setResgisterOpen }) {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
+
     axios
-      .post(
-        `http://backend:8080/register/${formData.username}/${formData.password}`
+      .get(
+        `/register/${formData.username}/${formData.password}`
       )
       .then(function (response) {
         console.log(response);
@@ -57,7 +62,7 @@ export default function RegisterModal({ registerOpen, setRegisterOpen }) {
       <Modal
         open={registerOpen}
         onClose={() => {
-          setRegisterOpen(false);
+          setResgisterOpen(false);
         }}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -68,7 +73,7 @@ export default function RegisterModal({ registerOpen, setRegisterOpen }) {
               <input
                 type="text"
                 id="input"
-                class="Input-text"
+                class="Input-text-modal"
                 placeholder="Username"
                 name="username"
                 value={formData.uername}
@@ -77,7 +82,7 @@ export default function RegisterModal({ registerOpen, setRegisterOpen }) {
               <input
                 type="password"
                 id="input"
-                class="Input-text"
+                class="Input-text-modal"
                 placeholder="Password"
                 name="password"
                 value={formData.password}
@@ -88,7 +93,7 @@ export default function RegisterModal({ registerOpen, setRegisterOpen }) {
             <button class="button-82-pushable" type="submit">
               <span class="button-82-shadow"></span>
               <span class="button-82-edge"></span>
-              <span class="button-82-front text">sign-up</span>
+              <span class="button-82-front text">Sign-up</span>
             </button>
           </form>
         </Box>

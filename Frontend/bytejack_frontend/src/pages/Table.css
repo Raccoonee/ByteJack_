@@ -5,6 +5,8 @@
   grid-column-gap: 0px;
   grid-row-gap: 0px;
   color: white;
+  font-size: 15px;
+
 }
 
 .div1 {
@@ -32,13 +34,6 @@
   grid-area: 3 / 9 / 5 / 11;
 }
 
-body
-{
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
 .background
 {
   background-image: url('./PokerBackground.jpg');
@@ -46,6 +41,10 @@ body
   background-attachment: fixed;
   background-size: cover;
   height: 100%;
+}
+
+p {
+  font-size: 40px;
 }
 
 

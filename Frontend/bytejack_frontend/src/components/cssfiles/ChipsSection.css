@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  align-items: center;
+  flex-direction: column-reverse;
+}
+.item {
+  flex: 1; /* Each item will take up an equal amount of space */
+  padding: 10px;
+  margin: 5px;
+  text-align: center; /* Center the text inside the item */
+}

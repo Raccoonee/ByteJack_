@@ -1,27 +1,30 @@
-  div.background
-  {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-  
-    background-image: url('./PokerBackground.jpg');
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-  }
-  
-  .bungee-spice-regular {
-    font-family: "Bungee Spice", sans-serif;
-    font-weight: 400;
-    font-style: normal;
-    font-size: 65px;
-    padding-top: 50px;
-    padding-bottom: 25px;
-    text-align: center;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  
+div.background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
 
+  background-image: url("./PokerBackground.jpg");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+}
+
+.bungee-spice-regular {
+  font-family: "Bungee Spice", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 65px;
+  padding-top: 50px;
+  padding-bottom: 25px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.lobby-list {
+  max-width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}

@@ -3,7 +3,7 @@ import random
 
 class DB:
     def __init__(self):
-        self.cnx = mysql.connector.connect(user='webapp', password='rotmgbestgame', host="db", database="bytejack")
+        self.cnx = mysql.connector.connect(user='root', password='rotmgbestgame', host="db", database="bytejack")
         self.cursor = self.cnx.cursor(buffered=True)
 
     def generate_ID(self): #can call an sql query so that no numbers match
@@ -19,12 +19,12 @@ class DB:
         return self.cursor.fetchone()
     
     def insert_player(self, username, password): #user, pass
-        query = "INSERT into player " + str(self.generate_ID())
+        query = "INSERT into player VALUES (" + str(self.generate_ID())
         query += ","
         query += username
         query += ","
-        query += password
-        + ",15000;"
+        query += str(password)
+        query += ",15000);"
         self.run_insertion(query)
 
     def get_player(self, username, password):

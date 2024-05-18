@@ -10,33 +10,35 @@ const ChipsSection = ({ socket }) => {
   };
 
   const handleBet = (event) => {
-    if(Number.isInteger(event) && event > 0) {
-      socket.emit("bet", {bet: event})
+    event.preventDefault();
+    if (Number.isInteger(Number.parseInt(formData)) && formData > 0) {
+      console.log(formData)
+      socket.emit("bet", { bet: formData });
     }
   };
 
   return (
-    <div>
-      <PokerChip color={"blue"}></PokerChip>
-      <PokerChip color={"green"}></PokerChip>
-      <PokerChip color={"black"}></PokerChip>
-      <div id="money">
-        <>
-          <form onSubmit={handleBet}>
-            <label htmlFor="Wager">Wager:</label>
-            <input
-              className="input"
-              type="text"
-              id="wager"
-              name="wager"
-              value={formData}
-              onChange={handleChange}
-            />
-            <button class="button-30" type="submit">
-              Submit
-            </button>
-          </form>
-        </>
+    <div id="parent">
+      <div class="child">
+        <PokerChip color={"blue"}></PokerChip>
+        <PokerChip color={"green"}></PokerChip>
+        <PokerChip color={"black"}></PokerChip>
+      </div>
+      <div class="child container">
+        <form onSubmit={handleBet}>
+          <label htmlFor="Wager">Wager:</label>
+          <input
+            className="input item"
+            type="text"
+            id="wager"
+            name="wager"
+            value={formData}
+            onChange={handleChange}
+          />
+          <button class="button-30 item" type="submit">
+            Submit
+          </button>
+        </form>
       </div>
     </div>
   );

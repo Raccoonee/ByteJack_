@@ -1,9 +1,9 @@
 export const testData = {
     gameID: 12345,
     playerTurn: "player1",
-    Dealer: { hand: ["K♠", "2♣", "3♦"] },
+    dealer: { hand: ["K♠", "2♣", "3♦"] },
     winners: ["player1", "player2"],
-    Players: {
+    players: {
       player1: {
         name: "Jeremiah",
         chips: 100,
