@@ -81,7 +81,7 @@ class Game():
                     self.playerOrder[key])
         return getPlayers
     
-    def player_stand(self, player):
+    def player_stand(self, player): # TODO: change player turn when player busts
         if self.isBetPhase:
             return
         if self.next() == "done":
