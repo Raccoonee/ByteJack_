@@ -26,38 +26,54 @@ def generate_code():
 def make_game():
     code = generate_code()
     lobbies[code] = Game(code, 1) #tochange
-    return code
+    send_lobbies()
 
 def send_update():
     lobbyCode = session["lobby"]
     message = lobbies[lobbyCode].get_game_state()
     emit("update", message, to=lobbyCode)
 
-@app.route("/getLobbies", methods=["GET"])
-def get_lobbies():
-    lobby = lobbies.keys()
+def send_lobbies():
     lobbyList = []
-    for lob in lobby:
-        lobbyList.append(lob)
-    return {"lobbies":lobbyList}#["ABCD", "BCDF"]
+    for lobby in lobbies.keys():
+        lobbyList.append(lobby)
+    emit("lobbies", {"lobbies":lobbyList}, to="AAAA", include_self=True)
 
-@app.route("/makeLobby", methods=["POST"])
+@socketio.on("makeLobby")
 def make_lobby():
     make_game()
-    return "made lobby"
+    emit("status2", {"message": "created lobby"}, include_self=True)
 
 @app.route("/getUSERS", methods=["get"])
 def getUSERS():
     return logins
 
-@app.route("/register/<username>/<password>", methods=["GET", "POST"])
-def make_player(username, password):
-    logins.append([username, password])
-    #database.insert_player(username, password)
-    return "successfully inserted"
+@socketio.on("joinLobbyRoom")
+def join_lobby_room():
+    join_room("AAAA")
+    response = {"message", "joined lobby room"}
+    emit("status", response, include_self=True)
 
-@app.route("/login/<username>/<password>", methods=["GET"])
-def login(username, password):
+@socketio.on("lobbies")
+def lobbiesMessage():
+    currentRoom = session.get("lobby")
+    if currentRoom is not None:
+        leave_room(currentRoom)
+    join_room("AAAA")
+    send_lobbies()
+    
+@socketio.on("register")
+def make_player(data):
+    username = data["username"]
+    password = data["password"]
+    logins.append([username, password])
+    response = {"message" : "registered"}
+    emit("status", response, include_self=True)
+
+@socketio.on("login")
+def login(data):
+    username = data["username"]
+    password = data["password"]
     for login in logins:
         if username not in login:
             continue
@@ -66,8 +82,11 @@ def login(username, password):
         person = username
         playersDict[username] = Player(username, 1, 15000)
         session["player"] = person
-        return "logged in!" + person
-    return "account doesn't exist"
+        response = {"message" : "logged in"}
+        emit("status", response, include_self=True)
+        return
+    response = {"message" : "failed to log in"}
+    emit("status", response, include_self=True)
 
 @socketio.on("join")
 def connect(data):

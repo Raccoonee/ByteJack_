@@ -1,16 +1,14 @@
 import "./Home.css";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "../components/BasicModal";
 import axios from "axios";
 import RegisterModal from "../components/RegisterModal";
+import { socket } from "../utils/socket";
 
 const Home = () => {
-  const userData = {
-    Players: ["Jeremiah", "Desmond", "devin"],
-    Passwords: ["1234", "4321", '1234'],
-  };
-
+  const [open, setOpen] = useState(false);
+  const [registerOpen, setResgisterOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -19,45 +17,21 @@ const Home = () => {
   //Page Redirection Component
   const navigate = useNavigate();
 
-  //Modal Component
-  const [open, setOpen] = React.useState(false);
-  const [registerOpen, setResgisterOpen] = React.useState(false);
 
-
-  const handleRegistration = () => {
-
-  }
+  const handleSocketStatus = (response) => {
+    console.log(response);
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
 
-    navigate("/lobby")
+    socket.emit("login", formData);
+    socket.emit("joinLobbyRoom")
 
-    axios
-      .get(
-        `/login/${formData.username}/${formData.password}`
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+    socket.on("status", handleSocketStatus);
+    socket.on("status2", handleSocketStatus);
 
-  const handleUsers = (event) => {
-    event.preventDefault();
-
-    axios
-      .get(
-        `/getUSERS`
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    navigate("/lobby");
   };
 
   const handleChange = (event) => {
@@ -67,6 +41,20 @@ const Home = () => {
       [name]: value,
     }));
   };
+
+  const handleUsers = (event) => {
+    event.preventDefault();
+
+    axios
+      .get(`/getUSERS`)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
 
   return (
     <>
@@ -114,13 +102,21 @@ const Home = () => {
             </button>
           </form>
 
-          <button class="button-82-pushable" onClick={() => {setResgisterOpen(true)}}>
+          <button
+            class="button-82-pushable"
+            onClick={() => {
+              setResgisterOpen(true);
+            }}
+          >
             <span class="button-82-shadow"></span>
             <span class="button-82-edge"></span>
             <span class="button-82-front text">Register</span>
           </button>
         </p>
-        <RegisterModal registerOpen={registerOpen} setResgisterOpen={setResgisterOpen}></RegisterModal>
+        <RegisterModal
+          registerOpen={registerOpen}
+          setResgisterOpen={setResgisterOpen}
+        ></RegisterModal>
         <BasicModal open={open} setOpen={setOpen}></BasicModal>
       </div>
     </>

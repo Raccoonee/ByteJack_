@@ -8,6 +8,7 @@ class Game():
         self.roomCode = roomCode
         self.betList = []
         self.winnerList = []
+        self.naturalList = []
         self.players = []
         self.playerOrder = {
             "player1": None,
@@ -31,12 +32,17 @@ class Game():
         for i in range(2):
             for player in self.players:
                 player.add_card(self.deck.get_card())
+                if i == 1 and player.hand_total() == 21:
+                    for k,v in self.playerOrder.items():
+                        if v == player:
+                            self.naturalList.append()
 
     def get_game_state(self):
         data = {}
         data["players"] = self.get_players()
         data["winners"] = self.get_winners()
         data["dealer"] = self.get_dealer()
+        data["naturals"] = self.get_naturals()
         data["gameID"] = self.roomCode
         data["playerTurn"] = "player" + str(self.currentTurn)
         return data
@@ -56,6 +62,14 @@ class Game():
         for i in range(1, 6):
             key = "player" + str(i)
             if self.playerOrder[key] in self.winnerList:
+                data.append(key)
+        return data
+    
+    def get_naturals(self):
+        data = []
+        for i in range(1, 6):
+            key = "player" + str(i)
+            if self.playerOrder[key] in self.naturalList:
                 data.append(key)
         return data
 
@@ -95,6 +109,11 @@ class Game():
             return
         self.next()
 
+    def did_bust(self, player) -> bool:
+        if player.hand_total() > 21:
+            return True
+        return False
+
     def player_hit(self, player):
         if self.isBetPhase:
             return
@@ -103,6 +122,8 @@ class Game():
         if current != player:
             return
         player.add_card(self.deck.get_card())
+        if self.did_bust(player): #forces a stand is a player busts
+            self.player_stand(player)
 
     def try_add_player(self, player):
         if self.isBetPhase == False:
