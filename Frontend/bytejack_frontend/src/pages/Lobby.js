@@ -15,6 +15,7 @@ const Lobby = ({ userData, setUserData }) => {
   const [lobbyList, setLobbyList] = useState(["No Lobbies Found"]);
 
   const handleJoinLobby = (lobbyID) => {
+
     setUserData({
       gameID: lobbyID,
     });
@@ -22,27 +23,25 @@ const Lobby = ({ userData, setUserData }) => {
     
   };
 
+  const handleSocketStatus = (response) => {
+    console.log(response);
+  };
+
+  const handleSocketData = (data) => {
+    console.log(data)
+    setLobbyList(data.lobbies)
+  }
+
   const handleRefresh = () => {
-    axios
-      .get(`/getLobbies`)
-      .then(function (response) {
-        setLobbyList(response.data.lobbies);
-        console.log(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    socket.emit("lobbies", handleSocketData)
+    socket.on("status", handleSocketStatus);
+
   };
 
   const handleCreateLobby = () => {
-    axios
-      .post(`/makeLobby`)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    socket.emit("makeLobby")
+    socket.on("status", handleSocketStatus);
+
   };
 
   return (

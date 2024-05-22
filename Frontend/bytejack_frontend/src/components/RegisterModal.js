@@ -5,6 +5,7 @@ import Modal from "@mui/material/Modal";
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { socket } from "../utils/socket";
 
 
 const style = {
@@ -33,20 +34,15 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
 
   const navigate = useNavigate();
 
+  const handleSocketStatus = (response) => {
+    console.log(response);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
-
-    axios
-      .get(
-        `/register/${formData.username}/${formData.password}`
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    socket.emit("register", formData)
+    socket.on("status", handleSocketStatus)
   };
 
   const handleChange = (event) => {
