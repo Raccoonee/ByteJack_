@@ -90,7 +90,7 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
               ></input>
             </div>
 
-            <button class="button-82-pushable" type="submit">
+            <button class="button-82-pushable" type="submit" onClick={() => {setResgisterOpen(false)}}>
               <span class="button-82-shadow"></span>
               <span class="button-82-edge"></span>
               <span class="button-82-front text">Sign-up</span>

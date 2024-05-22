@@ -15,11 +15,14 @@ const Lobby = ({ userData, setUserData }) => {
   const [lobbyList, setLobbyList] = useState(["No Lobbies Found"]);
 
   const handleJoinLobby = (lobbyID) => {
-    setUserData({
-      gameID: lobbyID,
-    });
-    navigate("/table");
-    
+    console.log(lobbyList);
+    if((lobbyList != "No Lobbies Found"))
+    {
+      setUserData({
+        gameID: lobbyID,
+      });
+      navigate("/table");
+    }
   };
 
   const handleRefresh = () => {
