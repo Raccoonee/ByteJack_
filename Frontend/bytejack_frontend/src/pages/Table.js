@@ -2,13 +2,13 @@ import "./Table.css";
 import ChipsSection from "../components/ChipsSection.js";
 import Actions from "../components/Actions.js";
 import React, { useEffect, useState } from "react";
-import { testData } from "../utils/testdata.js";
 import { socket } from "../utils/socket.js";
 import Player from "../components/Player.js";
 import Dealer from "../components/Dealer.js";
 
 const Table = ({ userData }) => {
   const [gameState, setGameState] = useState(undefined);
+
 
   const handleUpdate = (data) => {
     setGameState(data)
@@ -18,17 +18,12 @@ const Table = ({ userData }) => {
     console.log(data)
   }
 
-  const handleThisDick = (data) => {
-    console.log(data)
-  }
-
   useEffect(() => {
     socket.emit("join", {lobbyCode: userData.gameID})
-    socket.emit("penis")
 
     socket.on("update", handleUpdate)
     socket.on("status", handleStatus)
-    socket.on("penis", handleThisDick)
+
     console.log(gameState)
   }, []);
 
@@ -65,11 +60,10 @@ const Table = ({ userData }) => {
           </div>
           <div class="div4">
             {gameState !== undefined ? (
-              <Dealer dealerHand={gameState.dealer.hand}></Dealer>
+              <Dealer dealerHand={gameState.dealer.hand} gameID={userData.gameID}></Dealer>
             ) : (
               "Empty"
             )}
-            {userData.gameID}
           </div>
           <div class="div5">
             <ChipsSection socket={socket}></ChipsSection>

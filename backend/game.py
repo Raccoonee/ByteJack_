@@ -152,6 +152,7 @@ class Game():
         self.betList.append(player)
         if self.all_bets_in():
             self.start_game()
+            return "game started"
 
     def all_bets_in(self):
         for player in self.players:

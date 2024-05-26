@@ -1,10 +1,7 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { socket } from "../utils/socket";
 
 
@@ -32,14 +29,15 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
     password: "",
   });
 
-  const navigate = useNavigate();
 
-  const handleSocketStatus = (response) => {
-    console.log(response);
+  const handleSocketStatus = (data) => {
+    console.log(data);
   };
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    console.log(formData);
+
 
     socket.emit("register", formData)
     socket.on("status", handleSocketStatus)

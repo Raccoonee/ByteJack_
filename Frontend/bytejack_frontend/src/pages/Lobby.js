@@ -1,18 +1,21 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./Lobby.css";
 import { useNavigate } from "react-router-dom";
 import { socket } from "../utils/socket.js";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import ListSubheader from "@mui/material/ListSubheader";
 import { ListItemButton } from "@mui/material";
-import { FixedSizeList, ListChildComponentProps } from "react-window";
-import axios from "axios";
 
-const Lobby = ({ userData, setUserData }) => {
+const Lobby = ({ setUserData }) => {
   const navigate = useNavigate();
   const [lobbyList, setLobbyList] = useState(["No Lobbies Found"]);
+
+  useEffect(() => {
+    socket.emit("refreshLobbies")
+    socket.on("lobbies", handleSocketData);
+
+  }, []);
 
   const handleJoinLobby = (lobbyID) => {
     console.log(lobbyList);
@@ -34,15 +37,9 @@ const Lobby = ({ userData, setUserData }) => {
     setLobbyList(data.lobbies)
   }
 
-  const handleRefresh = () => {
-    socket.emit("lobbies", handleSocketData)
-    socket.on("status", handleSocketStatus);
-
-  };
-
   const handleCreateLobby = () => {
     socket.emit("makeLobby")
-    socket.on("status", handleSocketStatus);
+    socket.on("lobbies", handleSocketData);
 
   };
 
@@ -62,7 +59,7 @@ const Lobby = ({ userData, setUserData }) => {
         <h1 class="bungee-spice-regular">Available Lobbies</h1>
       </div>
       <div className="lobby-list">
-        <button onClick={handleRefresh}>Refesh</button>
+        {/* <button onClick={handleRefresh}>Refesh</button> */}
         <button onClick={handleCreateLobby}>Create Lobby</button>
         <List
           sx={{

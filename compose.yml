@@ -8,13 +8,17 @@ services:
       context: ./Frontend/bytejack_frontend
     ports:
       - "3000:3000"
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+    #     restart: true
   backend:
     build: ./backend
     image: pp
     ports:
       - "8080:8080"
     depends_on:
-      - "db"
+      - db
     restart: on-failure
   db:
     build: ./db
@@ -22,17 +26,3 @@ services:
     ports:
       - "3306:3306"
 
-
-
-
-# version: '3.8'
-
-# services:
-#   bytejack_frontend:
-#     build: 
-#       context: ./Frontend/bytejack_frontend
-#     container_name: Frontend
-#     ports:
-#       - "3000:3000"
-#     stdin_open: true
-#     tty: true

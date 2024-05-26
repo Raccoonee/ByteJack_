@@ -1,22 +1,23 @@
 import "./Home.css";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BasicModal from "../components/BasicModal";
-import axios from "axios";
 import RegisterModal from "../components/RegisterModal";
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+import Snackbar from "@mui/material/Snackbar";
+import Button from '@mui/material/Button';
 import { socket } from "../utils/socket";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [openSnackBar, setOpenSnackBar] = useState(false);
   const [registerOpen, setResgisterOpen] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     password: "",
   });
-
-  //Page Redirection Component
-  const navigate = useNavigate();
-
 
   const handleSocketStatus = (response) => {
     console.log(response);
@@ -26,7 +27,7 @@ const Home = () => {
     event.preventDefault();
 
     socket.emit("login", formData);
-    socket.emit("joinLobbyRoom")
+    socket.emit("joinLobbyRoom");
 
     socket.on("status", handleSocketStatus);
     socket.on("status2", handleSocketStatus);
@@ -42,18 +43,28 @@ const Home = () => {
     }));
   };
 
-  const handleUsers = (event) => {
-    event.preventDefault();
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackBar(false);
+  }
 
-    axios
-      .get(`/getUSERS`)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
 
 
   return (
@@ -69,9 +80,10 @@ const Home = () => {
           href="https://fonts.googleapis.com/css2?family=Bungee+Spice&display=swap"
           rel="stylesheet"
         />
-
         <h1 class="bungee-spice-regular">ByteJack</h1>
-        <button onClick={handleUsers}></button>
+        <button onClick={() => {
+          setOpenSnackBar(true)
+        }}>Snackbar</button>
         <p>
           <form onSubmit={handleSubmit}>
             <div class="Wrapper Input">
@@ -117,6 +129,13 @@ const Home = () => {
           registerOpen={registerOpen}
           setResgisterOpen={setResgisterOpen}
         ></RegisterModal>
+        <Snackbar
+          open={openSnackBar}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          message="Note archived"
+          action={action}
+        />
         <BasicModal open={open} setOpen={setOpen}></BasicModal>
       </div>
     </>

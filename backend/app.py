@@ -4,6 +4,7 @@ import random
 from game import Game
 from string import ascii_uppercase
 from player import Player
+from db import DB
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
@@ -12,7 +13,9 @@ socketio = SocketIO(app)
 logins = [["user1","pass1"], ["user2", "pass2"]]
 playersDict = {}
 lobbies = {} #gameID:BlackJackGame
+availableGames = []
 
+db = DB()
 
 def generate_code():
     while True:
@@ -26,6 +29,7 @@ def generate_code():
 def make_game():
     code = generate_code()
     lobbies[code] = Game(code, 1) #tochange
+    availableGames.append(code)
     send_lobbies()
 
 def send_update():
@@ -36,13 +40,13 @@ def send_update():
 def send_lobbies():
     lobbyList = []
     for lobby in lobbies.keys():
-        lobbyList.append(lobby)
-    emit("lobbies", {"lobbies":lobbyList}, to="AAAA", include_self=True)
+        lobbyList.append(lobby) #mayb delete bcoz we added availabel games
+    emit("lobbies", {"lobbies":availableGames}, to="AAAA", include_self=True)
 
 @socketio.on("makeLobby")
 def make_lobby():
     make_game()
-    emit("status2", {"message": "created lobby"}, include_self=True)
+    emit("status", {"message": "created lobby"}, include_self=True)
 
 @app.route("/getUSERS", methods=["get"])
 def getUSERS():
@@ -50,8 +54,9 @@ def getUSERS():
 
 @socketio.on("joinLobbyRoom")
 def join_lobby_room():
+    print("PLAYER JOINED LOBBY ROOM")
     join_room("AAAA")
-    response = {"message", "joined lobby room"}
+    response = {"message": "joined lobby room"}
     emit("status", response, include_self=True)
 
 @socketio.on("lobbies")
@@ -61,12 +66,18 @@ def lobbiesMessage():
         leave_room(currentRoom)
     join_room("AAAA")
     send_lobbies()
+
+@socketio.on("refreshLobbies")
+def refreshLobbies():
+    send_lobbies()
+    emit("status", {"message":"sent lobby data"}, include_self=True)
     
 @socketio.on("register")
 def make_player(data):
     username = data["username"]
     password = data["password"]
-    logins.append([username, password])
+    db.insert_player(username, password)
+    #logins.append([username, password])
     response = {"message" : "registered"}
     emit("status", response, include_self=True)
 
@@ -74,19 +85,18 @@ def make_player(data):
 def login(data):
     username = data["username"]
     password = data["password"]
-    for login in logins:
-        if username not in login:
-            continue
-        if password not in login:
-            continue
-        person = username
-        playersDict[username] = Player(username, 1, 15000)
-        session["player"] = person
+    playerID = db.get_player(username, password)
+    print(playerID)
+    try:
+        session["playerID"] = playerID[0]
+        session["player"] = username
+        playersDict[playerID[0]] = Player(username, 1, 15000)
         response = {"message" : "logged in"}
         emit("status", response, include_self=True)
         return
-    response = {"message" : "failed to log in"}
-    emit("status", response, include_self=True)
+    except:        
+        response = {"message" : "failed to log in"}
+        emit("status", response, include_self=True)
 
 @socketio.on("join")
 def connect(data):
@@ -96,12 +106,24 @@ def connect(data):
     if result == "success":
         session["lobby"] = lobbyCode
         join_room(lobbyCode)
+        leave_room("AAAA")
         send_update()
         data = {"status": lobbyCode}
         emit("status", data = {"status": "success"}, include_self=True) 
     elif result == "full":
         data = {"status": "failed"}
         emit("status", data = {"status": "fail"}, include_self=True) 
+
+@socketio.on("leaveGame")
+def leaveGame():
+    lobbyCode = session["lobby"]
+    person = session["player"]
+    lobbies[lobbyCode].remove_player(playersDict[person])
+    send_update()
+    leave_room(lobbyCode)
+    join_room("AAAA")
+    emit("status", {"message": "left game and rejoined lobby"}, include_self=True)
+
 
 # @socketio.on("disconnect")
 # def disconnect():
@@ -115,7 +137,12 @@ def bet(data):
     betAmount = data["bet"]
     lobbyCode = session["lobby"]
     player = playersDict[session["player"]]
-    lobbies[lobbyCode].get_bet(player, betAmount)
+    result = lobbies[lobbyCode].get_bet(player, betAmount)
+    if result == "game started":
+        try:   
+            availableGames.remove(lobbyCode)
+        except:
+            pass
     send_update()
 
 @socketio.on("hit")
