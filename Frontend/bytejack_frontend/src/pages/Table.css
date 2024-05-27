@@ -47,5 +47,11 @@ p {
   font-size: 40px;
 }
 
+.current-turn {
+  border: 2px solid #07c;
+  box-shadow: 0 0 10px #07c;
+  margin: 10px 10px 10px 10px;
+}
+
 
 

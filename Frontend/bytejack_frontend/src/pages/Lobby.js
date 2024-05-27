@@ -19,7 +19,7 @@ const Lobby = ({ setUserData }) => {
 
   const handleJoinLobby = (lobbyID) => {
     console.log(lobbyList);
-    if((lobbyList != "No Lobbies Found"))
+    if((lobbyList !== "No Lobbies Found"))
     {
       setUserData({
         gameID: lobbyID,
@@ -28,9 +28,6 @@ const Lobby = ({ setUserData }) => {
     }
   };
 
-  const handleSocketStatus = (response) => {
-    console.log(response);
-  };
 
   const handleSocketData = (data) => {
     console.log(data)
@@ -59,8 +56,7 @@ const Lobby = ({ setUserData }) => {
         <h1 class="bungee-spice-regular">Available Lobbies</h1>
       </div>
       <div className="lobby-list">
-        {/* <button onClick={handleRefresh}>Refesh</button> */}
-        <button onClick={handleCreateLobby}>Create Lobby</button>
+        <button class="button-30" onClick={handleCreateLobby}>Create Lobby</button>
         <List
           sx={{
             width: "100%",

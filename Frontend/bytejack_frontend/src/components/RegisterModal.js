@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useState } from "react";
@@ -17,11 +16,6 @@ const style = {
   p: 4,
 };
 
-const textStyle = {
-  textAlign: "center",
-  fontWeight: "bold",
-  color: "darkred",
-};
 
 export default function RegisterModal({ registerOpen, setResgisterOpen }) {
   const [formData, setFormData] = useState({

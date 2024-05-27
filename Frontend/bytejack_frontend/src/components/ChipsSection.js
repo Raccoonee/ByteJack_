@@ -25,6 +25,7 @@ const ChipsSection = ({ socket }) => {
         <PokerChip color={"black"}></PokerChip>
       </div>
       <div class="child container">
+        Game will start after all bets are in.
         <form onSubmit={handleBet}>
           <label htmlFor="Wager">Wager:</label>
           <input

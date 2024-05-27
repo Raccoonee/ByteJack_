@@ -4,9 +4,15 @@ import { cardCount } from "../utils/utils";
 const Dealer = ({ dealerHand, gameID }) => {
   return (
     <>
-      <div className=" padding">
-        <span>Game: {gameID}</span>
-        <span id="deler">Dealer</span>
+      <div className="padding">
+        <div id="gameID">
+          Game: {gameID}
+          <span></span>
+        </div>
+        <div id="dealer">
+          Dealer
+          <span></span>
+        </div>
         <div id="count">
           Card Count: {cardCount(dealerHand)}
           <span></span>
