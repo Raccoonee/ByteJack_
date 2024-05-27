@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
 socketio = SocketIO(app)
 
-logins = [["user1","pass1"], ["user2", "pass2"]]
+logins = [["user1","pass1"], ["user2", "pass2"], ["user3", "pass3"], ["user4", "pass4"], ["user5", "pass5"]]
 playersDict = {}
 lobbies = {} #gameID:BlackJackGame
 availableGames = []
@@ -93,7 +93,7 @@ def make_player(data):
 #         playersDict[playerID[0]] = Player(username, 1, 15000)
 #         response = {"message" : "logged in"}
 #         emit("status", response, include_self=True)
-#         return
+#         return    
 #     except:        
 #         response = {"message" : "failed to log in"}
 #         emit("status", response, include_self=True)
