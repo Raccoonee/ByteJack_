@@ -34,3 +34,17 @@ class Player():
 
     def clear_hand(self):
         self.hand.clear_hand()
+
+    def subtract_chips(self, num):
+        print(type(num))
+        print(type(self.chips))
+        num = int(num)
+        self.chips = int(self.chips)
+        self.chips -= num
+
+    def add_chips(self, num):
+        print(type(num))
+        print(type(self.chips))
+        num = int(num)
+        self.chips = int(self.chips)
+        self.chips += num

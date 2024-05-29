@@ -9,6 +9,8 @@ class Game():
         self.betList = []
         self.winnerList = []
         self.naturalList = []
+        self.bustList = []
+        self.pushList =[]
         self.players = []
         self.playerOrder = {
             "player1": None,
@@ -22,6 +24,7 @@ class Game():
         self.deck = Deck()
         self.deck.shuffle()
         self.isBetPhase = True
+        self.isGameOver = False
 
     def get_phase(self):
         return self.isBetPhase
@@ -58,6 +61,7 @@ class Game():
             self.dealer.add_card(self.deck.get_card())
 
     def get_winners(self):
+        print(self.winnerList)
         data = []
         for i in range(1, 6):
             key = "player" + str(i)
@@ -82,9 +86,22 @@ class Game():
         data["chips"] = player.get_chips()
         data["hand"] = player.get_hand()
         data["bet"] = player.get_bet()
+        #ethan
+        if self.isGameOver == True:
+            if player in self.winnerList:
+                data["state"] = "win"
+            elif player in self.bustList:
+                data["state"] = "bust"
+            elif player in self.pushList:
+                data["state"] = "push"
+            else:
+                data["state"] = "lose"
+        else:
+            data["state"] = ""
         return data
 
     def get_players(self):
+        winners = self.get_winners()
         getPlayers = {}
         for i in range(1, 6):
             key = "player" + str(i)
@@ -149,6 +166,7 @@ class Game():
         if self.isBetPhase == False:
             return
         player.set_bet(amount)
+        player.subtract_chips(amount)
         self.betList.append(player)
         if self.all_bets_in():
             self.start_game()
@@ -177,5 +195,13 @@ class Game():
             total = player.hand_total()
             if total > self.dealer.hand_total() and total < 22:
                 self.winnerList.append(player)
+                player.add_chips(player.get_bet()*2)
+            #ethan
+            elif total > 21:
+                self.bustList.append(player)
+            elif total == self.dealer.hand_total():
+                self.pushList.append(player)
+            player.set_bet(0)
+        self.isGameOver = True
 
         print("game finished!")

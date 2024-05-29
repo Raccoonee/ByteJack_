@@ -4,7 +4,9 @@ import random
 from game import Game
 from string import ascii_uppercase
 from player import Player
-# from db import DB
+import time as t
+from db import DB
+
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "SECRET!"
@@ -15,7 +17,19 @@ playersDict = {}
 lobbies = {} #gameID:BlackJackGame
 availableGames = []
 
-#db = DB()
+# while True:
+#     try:
+#         db = DB()
+#         print("CONNECTED")
+#         break
+#     except:
+#         pass
+
+print("finished connecting")
+
+socketio.on("connect")
+def connect():
+    print("user tried to connect")
 
 def generate_code():
     while True:
@@ -85,7 +99,7 @@ def make_player(data):
 # def login(data):
 #     username = data["username"]
 #     password = data["password"]
-#     playerID = #db.get_player(username, password)
+#     playerID = db.get_player(username, password)
 #     print(playerID)
 #     try:
 #         session["playerID"] = playerID[0]
@@ -98,7 +112,7 @@ def make_player(data):
 #         response = {"message" : "failed to log in"}
 #         emit("status", response, include_self=True)
 
-# This is old code for testing Please delete. Code above is current
+#This is old code for testing Please delete. Code above is current
 @socketio.on("login")
 def login(data):
     username = data["username"]
@@ -135,9 +149,11 @@ def connect(data):
 def leaveGame():
     lobbyCode = session["lobby"]
     person = session["player"]
+    playersDict[person].clear_hand()
     lobbies[lobbyCode].remove_player(playersDict[person])
     send_update()
     leave_room(lobbyCode)
+    session["lobby"] = "AAAA"
     join_room("AAAA")
     emit("status", {"message": "left game and rejoined lobby"}, include_self=True)
 

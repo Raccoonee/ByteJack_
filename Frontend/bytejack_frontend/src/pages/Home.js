@@ -21,6 +21,7 @@ const Home = () => {
     console.log(response);
     if (response?.message === "logged in") {
       navigate("/lobby");
+      socket.emit("joinLobbyRoom");
     } else {
       setOpenSnackBar(true);
     }
@@ -30,8 +31,7 @@ const Home = () => {
     event.preventDefault();
 
     socket.emit("login", formData);
-    socket.emit("joinLobbyRoom");
-
+    
     socket.on("status", handleSocketStatus);
     socket.on("status2", handleSocketStatus);
   };

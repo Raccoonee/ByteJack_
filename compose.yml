@@ -1,17 +1,11 @@
 version: '3.8'
 
 services:
-  app:
-    container_name: docker-react-container
-    image: docker-react-i
-    build: 
-      context: ./Frontend/bytejack_frontend
-    ports:
-      - "3000:3000"
-    # depends_on:
-    #   backend:
-    #     condition: service_healthy
-    #     restart: true
+  db:
+      build: ./db
+      image: pppp
+      ports:
+        - "3306:3306"
   backend:
     build: ./backend
     image: pp
@@ -20,9 +14,17 @@ services:
     depends_on:
       - db
     restart: on-failure
-  db:
-    build: ./db
-    image: pppp
+  app:
+    container_name: docker-react-container
+    image: docker-react-i
+    build: 
+      context: ./Frontend/bytejack_frontend
     ports:
-      - "3306:3306"
-
+      - "3000:3000"
+    depends_on:
+      - db
+      - backend
+    # depends_on:
+    #   backend:
+    #     condition: service_healthy
+    #     restart: true
