@@ -123,7 +123,7 @@ class Game():
         self.currentTurn += 1
         if self.currentTurn == 6:
             self.finish_game()
-            return
+            return "game is over"
         self.next()
 
     def did_bust(self, player) -> bool:

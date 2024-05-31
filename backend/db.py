@@ -28,3 +28,7 @@ class DB:
 
     def add_test(self): 
         self.cursor.execute("insert into player value (111, 'user10', 'pass10', 15000);")
+
+    def update(self, player):
+        newChips = player.get_chips()
+        #update query here
