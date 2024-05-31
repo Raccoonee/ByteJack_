@@ -23,9 +23,8 @@ const Table = ({ userData }) => {
 
     socket.on("update", handleUpdate);
     socket.on("status", handleStatus);
-
-    console.log(gameState);
   }, [gameState]);
+
 
   return (
     <>
@@ -38,6 +37,7 @@ const Table = ({ userData }) => {
           >
             {gameState !== undefined ? (
               <Player
+                state={gameState?.players?.player1?.state}
                 name={gameState.players.player1.name}
                 bet={gameState.players.player1.bet}
                 hand={gameState.players.player1.hand}
@@ -54,6 +54,7 @@ const Table = ({ userData }) => {
           >
             {gameState !== undefined ? (
               <Player
+                state={gameState?.players?.player2?.state}
                 name={gameState.players.player2.name}
                 bet={gameState.players.player2.bet}
                 hand={gameState.players.player2.hand}
@@ -86,6 +87,7 @@ const Table = ({ userData }) => {
           >
             {gameState !== undefined ? (
               <Player
+                state={gameState?.players?.player3?.state}
                 name={gameState.players.player3.name}
                 bet={gameState.players.player3.bet}
                 hand={gameState.players.player3.hand}
@@ -102,6 +104,7 @@ const Table = ({ userData }) => {
           >
             {gameState !== undefined ? (
               <Player
+                state={gameState?.players?.player4?.state}
                 name={gameState.players.player4.name}
                 bet={gameState.players.player4.bet}
                 hand={gameState.players.player4.hand}
@@ -118,6 +121,7 @@ const Table = ({ userData }) => {
           >
             {gameState !== undefined ? (
               <Player
+                state={gameState?.players?.player5?.state}
                 name={gameState.players.player5.name}
                 bet={gameState.players.player5.bet}
                 hand={gameState.players.player5.hand}

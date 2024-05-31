@@ -26,6 +26,11 @@ class Game():
         self.isBetPhase = True
         self.isGameOver = False
 
+    def is_not_full(self):
+        if len(self.players) < 5:
+            return True
+        return False
+
     def get_phase(self):
         return self.isBetPhase
 
@@ -39,6 +44,23 @@ class Game():
                     for k,v in self.playerOrder.items():
                         if v == player:
                             self.naturalList.append()
+    
+    def restart_game(self):
+        self.betList = []
+        self.winnerList = []
+        self.naturalList = []
+        self.bustList = []
+        self.pushList = []
+        self.currentTurn = 1
+        self.dealer = Player("dealer", 0, 0)
+        self.deck = Deck()
+        self.deck.shuffle()
+        self.isBetPhase = True
+        self.isGameOver = False
+        for player in self.players:
+            player.set_bet(0)
+            player.clear_hand()
+        return "game is restarted"
 
     def get_game_state(self):
         data = {}
@@ -48,6 +70,7 @@ class Game():
         data["naturals"] = self.get_naturals()
         data["gameID"] = self.roomCode
         data["playerTurn"] = "player" + str(self.currentTurn)
+        data["gameFinished"] = self.isGameOver
         return data
 
     def get_dealer(self):
@@ -124,7 +147,8 @@ class Game():
         if self.currentTurn == 6:
             self.finish_game()
             return "game is over"
-        self.next()
+        if self.next() == "done":
+            return "game is over"
 
     def did_bust(self, player) -> bool:
         if player.hand_total() > 21:
@@ -193,23 +217,15 @@ class Game():
         self.dealer_play()
         for player in self.players:
             total = player.hand_total()
-            if total > self.dealer.hand_total() and total < 22:
-                self.winnerList.append(player)
-                player.add_chips(player.get_bet()*2)
-            #ethan
-            elif total > 21:
+            if total > 21:
                 self.bustList.append(player)
-            elif total == self.dealer.hand_total():
+            if self.dealer.hand_total() > 21 and player not in self.bustList:
+                self.winnerList.append(player)
+            if total == self.dealer.hand_total():
                 self.pushList.append(player)
-            player.set_bet(0)
+        for player in self.winnerList:
+            player.add_chips(player.get_bet()*2)
+        for player in self.pushList:
+            player.add_chips(player.get_bet())
         self.isGameOver = True
-
         print("game finished!")
-
-    def reset(self, players):
-        '''
-        ideally takes in data indicating which players are in this new round and which ones aren't
-
-        players leave(or have left)
-        '''
-        pass

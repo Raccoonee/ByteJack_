@@ -1,9 +1,13 @@
 import Hand from "./Hand";
 import { cardCount } from "../utils/utils";
 
-const Player = ({ name, bet, hand, chips}) => {
+const Player = ({ name, bet, hand, chips, state}) => {
   return (
     <div className="padding">
+       <div id="bet">
+        {state}
+        <span></span>
+      </div>
       <span id="name">
         Name: {name}
         <span></span>

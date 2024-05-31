@@ -31,7 +31,7 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log(formData);
-
+    setResgisterOpen(false)
 
     socket.emit("register", formData)
     socket.on("status", handleSocketStatus)
@@ -64,7 +64,7 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
                 class="Input-text-modal"
                 placeholder="Username"
                 name="username"
-                value={formData.uername}
+                value={formData.username}
                 onChange={handleChange}
               ></input>
               <input
@@ -78,7 +78,7 @@ export default function RegisterModal({ registerOpen, setResgisterOpen }) {
               ></input>
             </div>
 
-            <button class="button-82-pushable" type="submit" onClick={() => {setResgisterOpen(false)}}>
+            <button class="button-82-pushable" type="submit">
               <span class="button-82-shadow"></span>
               <span class="button-82-edge"></span>
               <span class="button-82-front text">Sign-up</span>

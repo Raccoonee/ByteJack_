@@ -18,6 +18,8 @@ class Player():
         return self.bet
     
     def set_bet(self, amount):
+        if type(amount) == type("example"):
+            amount = int(amount)
         self.bet = amount
     
     def get_chips(self):
@@ -36,15 +38,10 @@ class Player():
         self.hand.clear_hand()
 
     def subtract_chips(self, num):
-        print(type(num))
-        print(type(self.chips))
-        num = int(num)
-        self.chips = int(self.chips)
-        self.chips -= num
+        newNum = int(num)
+        self.chips -= newNum
 
     def add_chips(self, num):
-        print(type(num))
-        print(type(self.chips))
-        num = int(num)
-        self.chips = int(self.chips)
-        self.chips += num
+        newNum = int(num)
+        self.chips += newNum #new amoiunt in front of old amount
+        print(self.chips)

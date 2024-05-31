@@ -31,4 +31,5 @@ class DB:
 
     def update(self, player):
         newChips = player.get_chips()
-        #update query here
+        id = player.get_id()
+        self.cursor.execute(f"update player set money ={newChips} where playerID={id};")
