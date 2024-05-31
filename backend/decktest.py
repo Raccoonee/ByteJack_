@@ -13,21 +13,22 @@ newDeck = Deck()
 
 newHand = Hand()
 
-newHand.add_card(newDeck.get_card())
-newHand.add_card(newDeck.get_card())
+for i in range(330):
+    newHand.add_card(newDeck.get_card())
 
-newHand2 = Hand()
 
-newHand2.add_card(newDeck.get_card())
-newHand2.add_card(newDeck.get_card())
-newHand2.add_card(newDeck.get_card())
+# newHand2 = Hand()
+
+# newHand2.add_card(newDeck.get_card())
+# newHand2.add_card(newDeck.get_card())
+# newHand2.add_card(newDeck.get_card())
 
 
 print(newHand.get_hand())
 print(newHand.get_hand_total())
 
-print(newHand2.get_hand())
-print(newHand2.get_hand_total())
+# print(newHand2.get_hand())
+# print(newHand2.get_hand_total())
 
 print(newDeck.get_deck())
 
