@@ -13,7 +13,6 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    restart: on-failure
   app:
     container_name: docker-react-container
     image: docker-react-i

@@ -17,17 +17,22 @@ playersDict = {}
 lobbies = {} #gameID:BlackJackGame
 availableGames = []
 
-# while True:
-#     try:
-#         db = DB()
-#         print("CONNECTED")
-#         break
-#     except:
-#         pass
+db = None
+
+def connect_db():
+    global db
+    while True:
+        try:
+            db = DB()
+            print("CONNECTED")
+            break
+        except:
+            pass
+
 
 print("finished connecting")
 
-socketio.on("connect")
+@socketio.on("connect")
 def connect():
     print("user tried to connect")
 
@@ -90,44 +95,46 @@ def refreshLobbies():
 def make_player(data):
     username = data["username"]
     password = data["password"]
-    #db.insert_player(username, password)
+    db.insert_player(username, password)
     logins.append([username, password])
     response = {"message" : "registered"}
     emit("status", response, include_self=True)
 
+@socketio.on("login")
+def login(data):
+    if db == None:
+        connect_db()
+    username = data["username"]
+    password = data["password"]
+    playerID = db.get_player(username, password)
+    print(playerID)
+    try:
+        session["playerID"] = playerID[0]
+        session["player"] = username
+        playersDict[playerID[0]] = Player(username, 1, 15000)
+        response = {"message" : "logged in"}
+        emit("status", response, include_self=True)
+        return    
+    except:        
+        response = {"message" : "failed to log in"}
+        emit("status", response, include_self=True)
+
+#This is old code for testing Please delete. Code above is current
 # @socketio.on("login")
 # def login(data):
 #     username = data["username"]
 #     password = data["password"]
-#     playerID = db.get_player(username, password)
-#     print(playerID)
-#     try:
-#         session["playerID"] = playerID[0]
-#         session["player"] = username
-#         playersDict[playerID[0]] = Player(username, 1, 15000)
+#     for login in logins:
+#         if username not in login:
+#             continue
+#         person = username
+#         playersDict[username] = Player(username, 1, 15000)
+#         session["player"] = person
 #         response = {"message" : "logged in"}
 #         emit("status", response, include_self=True)
-#         return    
-#     except:        
-#         response = {"message" : "failed to log in"}
-#         emit("status", response, include_self=True)
-
-#This is old code for testing Please delete. Code above is current
-@socketio.on("login")
-def login(data):
-    username = data["username"]
-    password = data["password"]
-    for login in logins:
-        if username not in login:
-            continue
-        person = username
-        playersDict[username] = Player(username, 1, 15000)
-        session["player"] = person
-        response = {"message" : "logged in"}
-        emit("status", response, include_self=True)
-        return
-    response = {"message" : "failed to log in"}
-    emit("status", response, include_self=True)
+#         return
+#     response = {"message" : "failed to log in"}
+#     emit("status", response, include_self=True)
 
 @socketio.on("join")
 def connect(data):

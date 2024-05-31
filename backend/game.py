@@ -205,3 +205,11 @@ class Game():
         self.isGameOver = True
 
         print("game finished!")
+
+    def reset(self, players):
+        '''
+        ideally takes in data indicating which players are in this new round and which ones aren't
+
+        players leave(or have left)
+        '''
+        pass
