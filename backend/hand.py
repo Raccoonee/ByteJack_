@@ -3,6 +3,9 @@ class Hand:
         self.cards = [] #contains "5♥"
     
     def get_hand_total(self):
+        """
+        returns the total of the hand
+        """
         total = 0
         for card in self.cards:
             match card[:-1]:
