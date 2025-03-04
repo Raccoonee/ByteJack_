@@ -288,7 +288,7 @@ class Game():
             if total > 21: #checks if player busted
                 self.bustList.append(player)
                 continue
-            if self.dealer.hand_total() > 21: #automatically wins if dealer busted
+            elif self.dealer.hand_total() > 21: #automatically wins if dealer busted
                 self.winnerList.append(player)
             elif total == self.dealer.hand_total(): #adds to push list if dealer and player tie
                 self.pushList.append(player)
